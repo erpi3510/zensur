@@ -6,8 +6,13 @@
       "tabs",
       "activeTab",
       "storage",
-      "tabGroups"
+      "scripting",
+      "notifications"
     ],
+    "host_permissions": [
+      "https://extension.action/*",
+      "https://extension.browser_action/*"
+  ],
     "background": {
       "service_worker": "background.js"
     },

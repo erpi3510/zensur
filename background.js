@@ -1,16 +1,3 @@
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.action == "checkURL") {
-    chrome.storage.local.get("blockedURLs", function (data) {
-      var blockedURLs = data.blockedURLs || [];
-      if (blockedURLs.includes(message.url)) {
-        chrome.tabs.sendMessage(sender.tab.id, {
-          action: "showWarning"
-        });
-      }
-    });
-  }
-});
-
 
 // Funktion, um die URL des Tabs zu überprüfen
 function checkTabURL(tabId, url) {

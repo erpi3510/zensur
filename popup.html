@@ -4,24 +4,52 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
-    <template id="li_template">
+    <!-- <template id="li_template">
       <li>
         <a>
           <h3 class="title">Tab Title</h3>
           <p class="pathname">Tab Pathname</p>
         </a>
       </li>
-    </template>
+    </template> -->
 
-    <h1>Zensur</h1>
-    <!-- <button>Group Tabs</button> -->
+    
+    <!-- <h1>Zensur</h1> 
+      <button>Group Tabs</button> -->
     <!-- <ul></ul> -->
-    <div id="host"></div>
+    <!-- <div id="host"></div> -->
     <!-- <script src="./popup.js" type="module"></script> -->
     <script src="./popup2.js" type="module" ></script>
+
+    <div class="card" style="padding: auto; background-color: #fffbfbd5;">
+      
+      <div class="card-body">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              
+                <div class="link_url">
+                  <div><img src="./images/bolt.png" alt="icon" width="20px"></div>
+                  <div id="host"></div>
+                </div>
+              
+            </div>
+            <div class="col-2">
+              <p class="center_text">Status:</p>
+            </div>
+            <div class="col">
+              <div class="link_state" id="status">&nbsp;&nbsp;&nbsp;Nicht sicher</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p> </p>
   
+
   </body>
 </html>

@@ -55,3 +55,16 @@ body {
     padding: 5px;
     align-self: center;
   }
+
+  .statistic_text {
+    display: flex; 
+    align-items: center; 
+    padding: 5px;
+    font-weight: bold;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .statistic_span {
+    margin-right: 5px;
+  }

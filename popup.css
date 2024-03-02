@@ -54,6 +54,7 @@ body {
     border-radius: 30px; 
     padding: 5px;
     align-self: center;
+    font-weight: bold;
   }
 
   .statistic_text {
@@ -67,4 +68,54 @@ body {
 
   .statistic_span {
     margin-right: 5px;
+  }
+
+  .bar_blue {
+    background-color: #369FFF;
+    border-radius: 50px;
+    
+  }
+
+  .anomalie_align {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 15px;
+    
+  }
+
+  .text_red1 {
+    font-size: 30px;
+    color: #FF6961;
+  }
+
+  .text_red2 {
+    font-size: 30px;
+    color: #D32F2F;
+  }
+
+  .text_orange {
+    font-size: 30px;
+    color: #FFA500;
+  }
+
+  .text_green {
+    font-size: 30px;
+    color: #4CAF50;
+  }
+
+  .card_nr1 {
+    max-width: 18rem; 
+    background-color: #eef6ffd2;
+    border-radius: 30px;
+   
+  }
+
+  .text_color_typ {
+    color: #8EA3B7;
+  }
+
+  .sizing_card {
+    max-height: 1%;
   }

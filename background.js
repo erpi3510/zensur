@@ -18,6 +18,7 @@ function checkTabURL(tabId, url) {
                 if (response.ok) {
                     const data = await response.json();
                     handleBlockedUrls(data);
+                    
                 } else {
                     handleBlockedUrls();
                     console.log('Error fetching blocked URLs:1', response.statusText);
@@ -29,7 +30,7 @@ function checkTabURL(tabId, url) {
             }
         }
         
-        fetchBlockedUrls()
+        fetchBlockedUrls();
       });
   }
 }
@@ -73,9 +74,9 @@ function extractNameAndDomain(url) {
 
 
 function handleBlockedUrls(data) {
-    if (data) {
+    if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
-        console.log(data.id);
+        console.log(data.id+' '+data.confirmed_count);
         showNotification();
         changeIcon('images/icon_48.png');
     } else {

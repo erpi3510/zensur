@@ -33,14 +33,6 @@ const tabs = await chrome.tabs.query({
 
 });
 
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.type === "urlsData") {
-        // Verarbeite die empfangenen Daten
-        handleUrls(message.data);
-        console.log('data123');
-    }
-});
-
 
 function extractNameAndDomain(url) {
     // URL analysieren, um die hostname Eigenschaft zu erhalten

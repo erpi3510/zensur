@@ -76,7 +76,7 @@ function extractNameAndDomain(url) {
 function handleBlockedUrls(data) {
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
-        console.log(data.id+' '+data.confirmed_count);
+        //console.log(data.id+' '+data.confirmed_count);
         showNotification();
         changeIcon('images/icon_48.png');
     } else {

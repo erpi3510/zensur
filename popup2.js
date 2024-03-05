@@ -13,7 +13,7 @@ const tabs = await chrome.tabs.query({
     var reported = document.getElementById('reported');
 
     reported.addEventListener('click', function () {
-        report(extractNameAndDomain(url));
+        report(url);
         closePage();
         reportMessage(extractNameAndDomain(url));
     });

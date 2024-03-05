@@ -12,7 +12,8 @@
     ],
     "host_permissions": [
       "https://extension.action/*",
-      "https://extension.browser_action/*"
+      "https://extension.browser_action/*",
+      "http://localhost:3003/report/*"
   ],
     "background": {
       "service_worker": "background.js"

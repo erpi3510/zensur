@@ -40,7 +40,7 @@ chrome.tabs.onCreated.addListener(function (tab) {
   checkTabURL(tab.id, tab.url);
 });
 
-// Benachrichtigung bei Tab-Aktualisierung
+// // Benachrichtigung bei Tab-Aktualisierung
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   checkTabURL(tab.id, tab.url);
 });

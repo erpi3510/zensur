@@ -10,6 +10,14 @@ const tabs = await chrome.tabs.query({
 
     });
 
+    var reported = document.getElementById('reported');
+
+    reported.addEventListener('click', function () {
+        report(extractNameAndDomain(url));
+        closePage();
+        reportMessage(extractNameAndDomain(url));
+    });
+
     fetchBlockedUrls(url);
     async function fetchBlockedUrls(url) {
         try {
@@ -72,20 +80,20 @@ function handleUrls(data) {
     var statusDiv = document.getElementById("status_url");
     var iconDiv = document.getElementById("icon_infos");
 
-    if(data && data.confirmed_count > 0){
+    if (data && data.confirmed_count > 0) {
         status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
-    }else if (data && data.confirmed_count == 0 && data.anomaly_count == 0){
+    } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
         status = document.getElementById("status_url").innerHTML = '&nbsp;sicher';
         statusDiv.style.backgroundColor = "#4CAF50";
         statusDiv.style.borderColor = "white";
         document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
-    }else if(data && data.confirmed_count >=0 && data.anomaly_count >=0){
+    } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
         document.getElementById("status_url").innerHTML = '&nbsp;warnung';
         statusDiv.style.backgroundColor = "#FFA500";
         document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
-    }else{
+    } else {
         document.getElementById("status_url").innerHTML = '&nbsp;unbekannt';
         statusDiv.style.backgroundColor = "#757575";
         document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
@@ -94,6 +102,13 @@ function handleUrls(data) {
     }
 
 }
+
+const convertTime = (date) => {
+    let hours = date.getHours().toString().padStart(2, '0');
+    let minutes = date.getMinutes().toString().padStart(2, '0');
+    let seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+};
 
 function convertDate(dateStr) {
     var date = new Date(dateStr);
@@ -110,11 +125,72 @@ function convertDate(dateStr) {
 var closeButton = document.getElementById('closeButton');
 
 // Füge einen Event Listener hinzu, um auf Klicks auf den Button zu reagieren
-closeButton.addEventListener('click', function() {
-  closePage();
+closeButton.addEventListener('click', function () {
+    closePage();
 });
 
 // Funktion zum Schließen der Seite
 function closePage() {
-  window.close(); // Schließt das Fenster
+    window.close(); // Schließt das Fenster
+}
+
+function report(url) {
+    const currentDate = new Date();
+    // Daten, die Sie übertragen möchten
+    const data = {
+        url: url,
+        date: convertDate(currentDate),
+        time: convertTime(currentDate),
+        state: "active"
+    };
+
+    // Konfiguration für die Fetch-Anfrage
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.EqoSwohanLHtAvsxa6hlaKO960J6NSPGkIha83doBDM' // Ersetzen Sie YOUR_TOKEN durch Ihren tatsächlichen Authentifizierungstoken
+        },
+        body: JSON.stringify(data)
+    };
+
+    // URL Ihrer POST-API
+    const apiUrl = 'http://localhost:3003/report';
+
+    // Fetch-Anfrage senden
+    fetch(apiUrl, requestOptions)
+        .then(res => {
+            if (!res.ok) {
+                // Hier könnten Sie genauer auf den Statuscode eingehen
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json(); // Stellen Sie sicher, dass der Server JSON antwortet
+        })
+        .then(data => {
+            console.log('POST request successful:', data);
+        })
+        .catch(error => {
+            // Dies wird sowohl Netzwerkfehler als auch Fehler von .json() abfangen
+            // boch zu prüfen console.error('There was a problem with your POST request:', error.message);
+        }
+    );
+
+}
+
+function reportMessage(url){
+    const iconUrl = 'images/icon_16.png';
+    chrome.notifications.create({
+        type: 'basic',
+        iconUrl: iconUrl,
+        title: 'Seite '+url,
+        message: url+' Seite gemeldet',
+        silent: false,
+    }, function (notificationId) {
+        chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
+            if (clickedNotificationId === notificationId) {
+                chrome.tabs.create({ url: 'https://tapas.io/'});
+                
+            }
+        });
+    });
 }

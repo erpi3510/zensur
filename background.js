@@ -17,7 +17,7 @@ function checkTabURL(tabId, url) {
                 // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                 if (response.ok) {
                     const data = await response.json();
-                    handleBlockedUrls(data);
+                    handleBlockedUrls(data,extractNameAndDomain(activeTabUrl));
                     
                 } else {
                     handleBlockedUrls();
@@ -73,11 +73,22 @@ function extractNameAndDomain(url) {
 }
 
 
-function handleBlockedUrls(data) {
+function handleBlockedUrls(data,urls) {
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
         //console.log(data.id+' '+data.confirmed_count);
-        showNotification();
+        chrome.storage.local.get([urls], function(result) {
+            if (result[urls]) {
+                console.log('URL:', urls, 'Date:', result[urls]);
+                storageManage(urls);
+            } else {
+                showNotification();
+                console.log('URL not found');
+                
+            }
+        });
+
+       
         changeIcon('images/icon_48.png');
     } else {
         // Keine Übereinstimmung gefunden
@@ -115,4 +126,40 @@ function changeIcon(iconPath) {
         }
     });
 }
+
+
+function storageManage(url){
+    chrome.storage.local.get([url], function(result) {
+        let storageDate = new Date(result[url]);
+        let currentDate = new Date();
+        let diff = currentDate.getTime() - storageDate.getTime();
+        let daysPassed = diff / (1000 * 3600 * 24); // Umrechnung von Millisekunden in Tage
+    
+        if (daysPassed > 1) { // Beispiel: Ablauf nach einem Tag
+            console.log('URL has expired:', url);
+            // Optional: Löschen der abgelaufenen URL
+            chrome.storage.local.remove([url], function() {
+                console.log('Expired URL removed:', url);
+            });
+        } else {
+            console.log('URL:2 ', url, ' Date: ', result[url]);
+        }
+    });
+}
+
+function clearStorage(){
+    chrome.storage.local.clear(function() {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        } else {
+            console.log('Storage is cleared');
+        }
+    });
+}
+
+//clearStorage();
+
+
+
 

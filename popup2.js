@@ -17,6 +17,26 @@ const tabs = await chrome.tabs.query({
         closePage();
         reportMessage(extractNameAndDomain(url));
     });
+    var urls = extractNameAndDomain(url);
+    var warningIgnored = document.getElementById('ignored');
+
+    warningIgnored.addEventListener('click', function () {
+
+        chrome.storage.local.get([urls], function(result) {
+            if (result[urls]) {
+                console.log('URL:', urls, 'Date:', result[urls]);
+                //document.getElementById("blocked_urls").innerHTML = 'URL: '+ urls+ ' Date: '+ result[urls];
+            } else {
+                addToBlockedUrls(urls);
+                //document.getElementById("blocked_urls").innerHTML = 'URL added to blocked_urls.json: ' + urls;
+                console.log('URL not found');
+            }
+        });
+
+        
+        closePage();
+        ignoreMessage(extractNameAndDomain(url));
+    });
 
     fetchBlockedUrls(url);
     async function fetchBlockedUrls(url) {
@@ -194,3 +214,48 @@ function reportMessage(url){
         });
     });
 }
+
+function ignoreMessage(url){
+    const iconUrl = 'images/icon_16.png';
+    chrome.notifications.create({
+        type: 'basic',
+        iconUrl: iconUrl,
+        title: 'Seite '+url,
+        message: url+' Seite Ignoriert',
+        silent: false,
+    });
+}
+
+
+function addToBlockedUrls(url) {
+let currentDate = new Date().toISOString(); // ISO String für Einheitlichkeit
+
+chrome.storage.local.set({[url]: currentDate}, function() {
+    console.log('URL and date are set');
+    storageManage(url);
+});
+}
+
+function storageManage(url){
+    chrome.storage.local.get([url], function(result) {
+        let storageDate = new Date(result[url]);
+        let currentDate = new Date();
+        let diff = currentDate.getTime() - storageDate.getTime();
+        let daysPassed = diff / (1000 * 3600 * 24); // Umrechnung von Millisekunden in Tage
+    
+        if (daysPassed > 1) { // Beispiel: Ablauf nach einem Tag
+            console.log('URL has expired:', url);
+            // Optional: Löschen der abgelaufenen URL
+            chrome.storage.local.remove([url], function() {
+                console.log('Expired URL removed:', url);
+            });
+        } else {
+            console.log('URL:', url, 'Date:', result[url]);
+        }
+    });
+}
+
+
+
+
+

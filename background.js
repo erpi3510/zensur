@@ -1,53 +1,72 @@
-
 function checkTabURL(tabId, url) {
-  console.log("Tab ID:", tabId, "URL:", url);
+    console.log("Tab ID:", tabId, "URL:", url);
 
-  if (url) {
-      chrome.tabs.query({
-          active: true,
-          currentWindow: true
-      }, function (tabs) {
-          var activeTab = tabs[0];
-          var activeTabUrl = activeTab.url;
+    if (url) {
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function (tabs) {
+            var activeTab = tabs[0];
+            var activeTabUrl = activeTab.url;
 
-          async function fetchBlockedUrls() {
-            try {
-                const response = await fetch('http://localhost:3003/data/url/' + extractNameAndDomain(activeTabUrl));
-                
-                // Überprüfe, ob die Antwort erfolgreich war (Status 200)
-                if (response.ok) {
-                    const data = await response.json();
-                    handleBlockedUrls(data,extractNameAndDomain(activeTabUrl));
-                    
-                } else {
-                    handleBlockedUrls();
-                    console.log('Error fetching blocked URLs:1', response.statusText);
+            async function fetchBlockedUrls() {
+                try {
+                    const response = await fetch('http://localhost:3003/data/domain/' + extractNameAndDomain(activeTabUrl));
+
+                    // Überprüfe, ob die Antwort erfolgreich war (Status 200)
+                    if (response.ok) {
+                        const data = await response.json();
+                        handleBlockedUrls(data, extractNameAndDomain(activeTabUrl));
+
+                    } else {
+                        handleBlockedUrls();
+                        console.log('Error fetching blocked URLs:1', response.statusText);
+                        // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+                    }
+                } catch (error) {
+                    console.log('Error fetching blocked URLs:2', error);
                     // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
                 }
-            } catch (error) {
-                console.log('Error fetching blocked URLs:2', error);
-                // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
             }
-        }
-        
-        fetchBlockedUrls();
-      });
-  }
+
+            async function fetchBlocked() {
+                try {
+                    const response = await fetch('http://localhost:3003/data/urlBlocked/' + extractNameAndDomain(activeTabUrl));
+
+                    // Überprüfe, ob die Antwort erfolgreich war (Status 200)
+                    if (response.ok) {
+                        const data = await response.json();
+                        showNotificationBlocked(data);
+
+                    } else {
+                        fetchBlockedUrls();
+                        console.log('Error fetching blocked URLs:12', response.statusText);
+                        // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+                    }
+                } catch (error) {
+                    console.log('Error fetching blocked URLs:22', error);
+                    // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+                }
+            }
+
+            fetchBlocked();
+        });
+    }
 }
 
 
 chrome.tabs.onCreated.addListener(function (tab) {
-  checkTabURL(tab.id, tab.url);
+    checkTabURL(tab.id, tab.url);
 });
 
 // // Benachrichtigung bei Tab-Aktualisierung
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  checkTabURL(tab.id, tab.url);
+    checkTabURL(tab.id, tab.url);
 });
 
-chrome.tabs.onActivated.addListener(function(tabId, changeInfo, tab) {
- 
-  checkTabURL(0, 'tab.url');
+chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
+
+    checkTabURL(0, 'tab.url');
 });
 
 
@@ -73,27 +92,49 @@ function extractNameAndDomain(url) {
 }
 
 
-function handleBlockedUrls(data,urls) {
+function handleBlockedUrls(data, urls) {
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
         //console.log(data.id+' '+data.confirmed_count);
-        chrome.storage.local.get([urls], function(result) {
+        chrome.storage.local.get([urls], function (result) {
             if (result[urls]) {
                 console.log('URL:', urls, 'Date:', result[urls]);
                 storageManage(urls);
             } else {
                 showNotification();
                 console.log('URL not found');
-                
+
             }
         });
 
-       
+
         changeIcon('images/icon_48.png');
     } else {
         // Keine Übereinstimmung gefunden
         changeIcon('images/icon-48.png');
     }
+}
+
+function showNotificationBlocked(data) {
+    const iconUrl = 'images/icon_16.png';
+
+    chrome.notifications.create({
+        type: 'basic',
+        iconUrl: iconUrl,
+        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht' + data.url,
+        message: 'Es gab eine Warnmeldung',
+        silent: false,
+    }, function (notificationId) {
+        chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
+            if (clickedNotificationId === notificationId) {
+                chrome.tabs.create({
+                    url: data.source
+                });
+
+            }
+        });
+    });
+    changeIcon('images/icon_48.png');
 }
 
 
@@ -109,8 +150,10 @@ function showNotification() {
     }, function (notificationId) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
             if (clickedNotificationId === notificationId) {
-                chrome.tabs.create({ url: 'https://chat.openai.com'});
-                
+                chrome.tabs.create({
+                    url: 'https://chat.openai.com'
+                });
+
             }
         });
     });
@@ -128,17 +171,17 @@ function changeIcon(iconPath) {
 }
 
 
-function storageManage(url){
-    chrome.storage.local.get([url], function(result) {
+function storageManage(url) {
+    chrome.storage.local.get([url], function (result) {
         let storageDate = new Date(result[url]);
         let currentDate = new Date();
         let diff = currentDate.getTime() - storageDate.getTime();
         let daysPassed = diff / (1000 * 3600 * 24); // Umrechnung von Millisekunden in Tage
-    
+
         if (daysPassed > 1) { // Beispiel: Ablauf nach einem Tag
             console.log('URL has expired:', url);
             // Optional: Löschen der abgelaufenen URL
-            chrome.storage.local.remove([url], function() {
+            chrome.storage.local.remove([url], function () {
                 console.log('Expired URL removed:', url);
             });
         } else {
@@ -147,8 +190,8 @@ function storageManage(url){
     });
 }
 
-function clearStorage(){
-    chrome.storage.local.clear(function() {
+function clearStorage() {
+    chrome.storage.local.clear(function () {
         var error = chrome.runtime.lastError;
         if (error) {
             console.error(error);
@@ -159,7 +202,3 @@ function clearStorage(){
 }
 
 //clearStorage();
-
-
-
-

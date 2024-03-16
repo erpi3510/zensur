@@ -8,7 +8,9 @@
       "activeTab",
       "storage",
       "scripting",
-      "notifications"
+      "notifications",
+      "topSites",
+      "webRequest"
     ],
     "host_permissions": [
       "https://extension.action/*",
@@ -27,6 +29,7 @@
         "128": "images/icon-128.png"
       }
     },
+    "options_page": "extra.html",
     "icons": {
         "16": "images/icon-16.png",
         "32": "images/icon-32.png",

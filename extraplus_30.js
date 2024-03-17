@@ -5,7 +5,7 @@ chrome.topSites.get((topSites) => {
     //document.getElementById("topurls").innerHTML = selectedOptionId;
     //document.getElementById("blocked_urls").innerHTML = JSON.stringify(topSites.url);
 
-    const select = document.getElementById('dynamicSelect');
+    const select = document.getElementById('dynamicSelect30');
 
     const urlsAdded = new Set(); // Ein Set, um bereits hinzugefügte URLs zu speichern
 
@@ -22,7 +22,7 @@ chrome.topSites.get((topSites) => {
 
     async function fetchDataAndCheckResponse(url) {
         try {
-            const response = await fetch('http://localhost:3003/data/domain/getdata7days/' + url);
+            const response = await fetch('http://localhost:3003/data/domain/getdata30days/' + url);
 
 
             if (response.ok) {
@@ -61,7 +61,7 @@ chrome.topSites.get((topSites) => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const selectElement = document.getElementById('dynamicSelect');
+    const selectElement = document.getElementById('dynamicSelect30');
 
     selectElement.addEventListener('change', function () {
         // Hier erhalten Sie die ID der ausgewählten Option
@@ -96,8 +96,7 @@ async function updateDropdownMenu() {
     try {
         // Daten aus dem Local Storage abrufen
         const valueUrl = await getValueFromLocalStorage('actualUrl');
-        const selectElement = document.getElementById('dynamicSelect');
-
+        const selectElement = document.getElementById('dynamicSelect30');
 
         // Wenn die URL nicht im Local Storage vorhanden ist, leeres Dropdown-Menü anzeigen
         if (!valueUrl) {
@@ -123,7 +122,7 @@ async function fetchDataAndCreateChart(url) {
 
 
         const domainName = url;
-        const response = await fetch('http://localhost:3003/data/domain/getdata7days/' + domainName);
+        const response = await fetch('http://localhost:3003/data/domain/getdata30days/' + domainName);
         const data = await response.json();
 
         // Überprüfe, ob die erwarteten Daten vorhanden sind
@@ -195,7 +194,7 @@ async function fetchDataAndCreateChart(url) {
         };
 
         // Chart erstellen
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = document.getElementById('myChart30').getContext('2d');
         new Chart(ctx, {
             type: 'bar', // Ändere zu 'bar', um ein Balkendiagramm zu verwenden
             data: chartData,
@@ -208,7 +207,7 @@ async function fetchDataAndCreateChart(url) {
 
 document.addEventListener('DOMContentLoaded', async function () {
     await updateDropdownMenu();
-    const selectElement = document.getElementById('dynamicSelect');
+    const selectElement = document.getElementById('dynamicSelect30');
     selectElement.addEventListener('change', async function () {
         const selectedUrl = selectElement.value;
         await fetchDataAndCreateChart(selectedUrl);

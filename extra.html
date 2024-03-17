@@ -15,32 +15,46 @@
     <script src="./bootstrap/js/bootstrap.min.js" type="module"></script>
     <script src="./chart.js" type="module"></script>
     <script src="./extraplus.js" type="module"></script>
+    <script src="./extraplus_30.js" type="module"></script>
+    <script src="./extraplus_365.js" type="module"></script>
+    <script src="./utils.js" type="module"></script>
     <h1>Trend</h1>
     <p id="topurls"></p>
 
     <div class="container tabbable boxed parentTabs p-4">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab"
+                <a class="nav-item nav-link active" id="nav-7" data-bs-toggle="tab" href="#nav-home" role="tab"
                     aria-controls="nav-home" aria-selected="true">Letzte 7 Tage</a>
-                <a class="nav-item nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab"
+                <a class="nav-item nav-link" id="nav-30" data-bs-toggle="tab" href="#nav-profile" role="tab"
                     aria-controls="nav-profile" aria-selected="false">Letzter Monat</a>
-                <a class="nav-item nav-link" id="nav-contact-tab" data-bs-toggle="tab" href="#nav-contact" role="tab"
+                <a class="nav-item nav-link" id="nav-365" data-bs-toggle="tab" href="#nav-contact" role="tab"
                     aria-controls="nav-contact" aria-selected="false">Dieses Jahr</a>
             </div>
+            
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                
-            </div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-7">
                 <p>&nbsp;</p>
                 <select class="form-select" aria-label="Default select example" id="dynamicSelect">
                     <option selected>Open this select menu</option>
                 </select>
                 <canvas id="myChart"></canvas>
             </div>
-            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">Kontaktinhalt</div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-30">
+                <p>&nbsp;</p>
+                <select class="form-select" aria-label="Default select example" id="dynamicSelect30">
+                    <option selected>Open this select menu</option>
+                </select>
+                <canvas id="myChart30"></canvas>
+            </div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-365">
+                <p>&nbsp;</p>
+                <select class="form-select" aria-label="Default select example" id="dynamicSelect365">
+                    <option selected>Open this select menu</option>
+                </select>
+                <canvas id="myChart365"></canvas>
+            </div>
         </div>
     </div>
     

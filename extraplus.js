@@ -1,6 +1,8 @@
 chrome.topSites.get((topSites) => {
+  
     //document.getElementById("topurls").innerHTML = JSON.stringify(topSites[0].url);
-    document.getElementById("topurls").innerHTML = JSON.stringify(topSites);
+    //document.getElementById("topurls").innerHTML = JSON.stringify(topSites);
+    //document.getElementById("topurls").innerHTML = selectedOptionId;
     //document.getElementById("blocked_urls").innerHTML = JSON.stringify(topSites.url);
 
 const select = document.getElementById('dynamicSelect');
@@ -20,6 +22,26 @@ topSites.forEach((record, i) => {
 
     console.log('Top-Sites:', topSites);
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const selectElement = document.getElementById('dynamicSelect');
+
+    selectElement.addEventListener('change', function() {
+        // Hier erhalten Sie die ID der ausgewählten Option
+        const selectedOptionId = this.options[this.selectedIndex].id;
+
+        // Oder den Wert der ausgewählten Option
+        const selectedOptionValue = this.value;
+        document.getElementById("topurls").innerHTML = selectedOptionValue;
+
+        // Führen Sie hier Ihre Aktion aus, z.B. eine Ausgabe in der Konsole
+        console.log('Ausgewählte Option ID:', selectedOptionId);
+        console.log('Ausgewählter Option Wert:', selectedOptionValue);
+
+        // Hier können Sie auf Basis der Auswahl weitere Aktionen ausführen
+    });
+});
+
 
   document.addEventListener('DOMContentLoaded', function () {
     // Daten für das Liniendiagramm

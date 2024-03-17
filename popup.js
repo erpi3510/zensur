@@ -9,7 +9,7 @@ const tabs = await chrome.tabs.query({
         $('#host').attr('title', currentURL);
 
     });
-
+    modusOnLoad();
     var reported = document.getElementById('reported');
 
     reported.addEventListener('click', function () {
@@ -22,7 +22,7 @@ const tabs = await chrome.tabs.query({
 
     warningIgnored.addEventListener('click', function () {
 
-        chrome.storage.local.get([urls], function(result) {
+        chrome.storage.local.get([urls], function (result) {
             if (result[urls]) {
                 console.log('URL:', urls, 'Date:', result[urls]);
                 //document.getElementById("blocked_urls").innerHTML = 'URL: '+ urls+ ' Date: '+ result[urls];
@@ -33,7 +33,7 @@ const tabs = await chrome.tabs.query({
             }
         });
 
-        
+
         closePage();
         ignoreMessage(extractNameAndDomain(url));
     });
@@ -192,61 +192,111 @@ function report(url) {
         .catch(error => {
             // Dies wird sowohl Netzwerkfehler als auch Fehler von .json() abfangen
             // boch zu prüfen console.error('There was a problem with your POST request:', error.message);
-        }
-    );
+        });
 
 }
 
-function reportMessage(url){
+function reportMessage(url) {
     const iconUrl = 'images/icon_16.png';
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Seite '+url,
-        message: url+' Seite gemeldet',
+        title: 'Seite ' + url,
+        message: url + ' Seite gemeldet',
         silent: false,
     }, function (notificationId) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
             if (clickedNotificationId === notificationId) {
-                chrome.tabs.create({ url: 'https://tapas.io/'});
-                
+                chrome.tabs.create({
+                    url: 'https://tapas.io/'
+                });
+
             }
         });
     });
 }
 
-function ignoreMessage(url){
+function ignoreMessage(url) {
     const iconUrl = 'images/icon_16.png';
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Seite '+url,
-        message: url+' Seite Ignoriert',
+        title: 'Seite ' + url,
+        message: url + ' Seite Ignoriert',
         silent: false,
     });
 }
 
 
 function addToBlockedUrls(url) {
-let currentDate = new Date().toISOString(); // ISO String für Einheitlichkeit
+    let currentDate = new Date().toISOString(); // ISO String für Einheitlichkeit
 
-chrome.storage.local.set({[url]: currentDate}, function() {
-    console.log('URL and date are set');
-    storageManage(url);
-});
+    chrome.storage.local.set({
+        [url]: currentDate
+    }, function () {
+        console.log('URL and date are set');
+        storageManage(url);
+    });
 }
 
-function storageManage(url){
-    chrome.storage.local.get([url], function(result) {
+
+// $(document).ready(function() {
+//     // Beim Laden der Seite Modus aus dem Storage abrufen
+//     chrome.storage.local.get("modus", function(data) {
+//       var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
+//       if (modusValue) {
+//         // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+//         document.getElementById("flexSwitchValue").innerHTML = "Schwer";
+//         console.log('Schalter eingeschaltet');
+//       } else {
+//         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+//         document.getElementById("flexSwitchValue").innerHTML = "Normal";
+//         console.log('Schalter ausgeschaltet');
+//       }
+//       $('#flexSwitchCheckDefault').prop('checked', modusValue);
+//     });
+  
+//     // Event-Handler für den Schalter hinzufügen
+//     $('#flexSwitchCheckDefault').change(function() {
+//       var checked = $(this).prop('checked');
+      
+//       // Speichern des Booleschen Werts im Storage
+//       chrome.storage.local.set({ "modus": checked });
+
+//       if (checked) {
+//         // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+//         document.getElementById("flexSwitchValue").innerHTML = "Schwer";
+//         console.log('Schalter eingeschaltet');
+//       } else {
+//         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+//         document.getElementById("flexSwitchValue").innerHTML = "Normal"
+//         console.log('Schalter ausgeschaltet');
+//       }
+//     });
+//   });
+  
+
+      function modusOnLoad(){
+        chrome.storage.local.get("modus", function(data) {
+
+            //document.getElementById("flexSwitchValue").innerHTML = data.modus;
+            //$('#flexSwitchCheckDefault').prop('checked', checked);
+          });
+      }
+      
+
+
+function storageManage(url) {
+    chrome.storage.local.get([url], function (result) {
         let storageDate = new Date(result[url]);
         let currentDate = new Date();
         let diff = currentDate.getTime() - storageDate.getTime();
         let daysPassed = diff / (1000 * 3600 * 24); // Umrechnung von Millisekunden in Tage
-    
+
         if (daysPassed > 1) { // Beispiel: Ablauf nach einem Tag
             console.log('URL has expired:', url);
             // Optional: Löschen der abgelaufenen URL
-            chrome.storage.local.remove([url], function() {
+            chrome.storage.local.remove([url], function () {
                 console.log('Expired URL removed:', url);
             });
         } else {
@@ -254,8 +304,3 @@ function storageManage(url){
         }
     });
 }
-
-
-
-
-

@@ -36,7 +36,17 @@ function checkTabURL(tabId, url) {
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
                         const data = await response.json();
-                        showNotificationBlocked(data);
+                       
+                        chrome.storage.local.get([extractNameAndDomain(activeTabUrl)], function (result) {
+                            if (result[extractNameAndDomain(activeTabUrl)]) {
+                                console.log('URL:', extractNameAndDomain(activeTabUrl), 'Date:', result[extractNameAndDomain(activeTabUrl)]);
+                                storageManage(urls);
+                            } else {
+                                showNotificationBlocked(data);
+                                console.log('URL not found on block list');
+                
+                            }
+                        });
 
                     } else {
                         fetchBlockedUrls();
@@ -199,6 +209,24 @@ function clearStorage() {
             console.log('Storage is cleared');
         }
     });
+}
+
+// Funktion, um die Anfrage zu blockieren oder zuzulassen
+function blockOrAllowRequest(details) {
+    // Holen der Antwort von einem Server
+    const currentUrl = details.url;
+    return fetch('http://localhost:3003/data/urlBlocked/' + currentUrl)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Fehler beim Abrufen der Antwort:', response.statusText);
+                return { cancel: false }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
+            }
+            return { cancel: true }; // Blockiert die Anfrage, wenn die Antwort "OK" ist
+        })
+        .catch(error => {
+            console.error('Fehler beim Abrufen der Antwort:', error);
+            return { cancel: false }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
+        });
 }
 
 //clearStorage();

@@ -2,6 +2,22 @@ chrome.topSites.get((topSites) => {
     //document.getElementById("topurls").innerHTML = JSON.stringify(topSites[0].url);
     document.getElementById("topurls").innerHTML = JSON.stringify(topSites);
     //document.getElementById("blocked_urls").innerHTML = JSON.stringify(topSites.url);
+
+const select = document.getElementById('dynamicSelect');
+
+const urlsAdded = new Set(); // Ein Set, um bereits hinzugefügte URLs zu speichern
+
+topSites.forEach((record, i) => {
+    const url = extractNameAndDomain(record.url);
+    if (!urlsAdded.has(url)) { // Überprüfen, ob die URL bereits hinzugefügt wurde
+        const option = document.createElement('option');
+        option.value = url; // 'i' plus 1, da Optionen normalerweise von 1 an nummeriert sind
+        option.text = url;
+        select.appendChild(option);
+        urlsAdded.add(url); // Füge die URL zum Set hinzu, um Duplikate zu vermeiden
+    }
+});
+
     console.log('Top-Sites:', topSites);
   });
 
@@ -59,15 +75,31 @@ chrome.topSites.get((topSites) => {
     });
 });
 
-// chrome.webRequest.onBeforeRequest.addListener(
-//     function(details) {
-//       // Überprüfe, ob die URL mit 'http:' beginnt, was auf unsichere Inhalte hindeutet
-//       if (details.url.startsWith("http:")) {
-//         console.log("Unsichere Anfrage entdeckt:", details.url);
-//         // Du kannst hier weitere Aktionen durchführen, wie z.B. Benachrichtigungen senden
-//       }
-//     },
-//     {urls: ["<all_urls>"]}, // Überwache alle URLs
-//     ["blocking"] // Verwende den "blocking" Modus, falls du die Anfrage modifizieren oder blockieren möchtest
-//   );
+
+
+$("ul.nav-tabs a").click(function (e) {
+    e.preventDefault();  
+      $(this).tab('show');
+  });
+  
+
+
+  function extractNameAndDomain(url) {
+    // URL analysieren, um die hostname Eigenschaft zu erhalten
+    const urlObject = new URL(url);
+    var hostname = urlObject.hostname;
+
+    // Überprüfen, ob der Hostname mit "www." beginnt, und ihn bei Bedarf entfernen
+    if (hostname.startsWith("www.")) {
+        hostname = hostname.substring(4); // "www." entfernen
+    }
+
+    // Aufteilen des Hostnamens in Namen und Domain
+    const parts = hostname.split('.');
+    const name = parts[0]; // Verwende den ersten Teil als Name
+    const domain = parts.slice(1).join('.'); // Verwende den Rest als Domain
+
+    console.log(name + '.' + domain);
+    return name + '.' + domain;
+}
   

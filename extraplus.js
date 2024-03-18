@@ -23,19 +23,23 @@ chrome.topSites.get((topSites) => {
     async function fetchDataAndCheckResponse(url) {
         try {
             const response = await fetch('http://localhost:3003/data/domain/getdata7days/' + url);
-
-
+    
             if (response.ok) {
-                return true; // Erfolgreiche Antwort erhalten
+                const data = await response.json();
+
+                return data.length > 0;
+            } else if (response.status === 404) {
+                console.error('Keine Daten gefunden für:', url);
+                return false; // Spezifische Behandlung für "nicht gefunden"
             } else {
-                //console.error('Fehler beim Abrufen der Daten für:', url);
-                return false; // Fehler beim Abrufen der Daten
+                return false; // Andere Fehler
             }
         } catch (error) {
             console.error('Fehler beim Abrufen der Daten für:', url, error);
-            return false; // Fehler beim Abrufen der Daten
+            return false;
         }
     }
+    
 
     // Funktion zum Hinzufügen einer URL zum Dropdown-Menü, wenn die Antwort erfolgreich ist
     async function addUrlToDropdown(url) {
@@ -120,75 +124,72 @@ async function updateDropdownMenu() {
 
 async function fetchDataAndCreateChart(url) {
     try {
-
-
         const domainName = url;
         const response = await fetch('http://localhost:3003/data/domain/getdata7days/' + domainName);
         const data = await response.json();
 
         // Überprüfe, ob die erwarteten Daten vorhanden sind
-        if (!data || typeof data.anomaly_count === 'undefined') {
-            console.error('Erwartete Daten nicht im Antwortobjekt gefunden.');
+        if (!data || data.length === 0) {
+            console.error('Keine Daten gefunden.');
             return;
         }
 
-        // Farbdefinitionen
-        const colors = [{
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)'
-            }, // Rot
-            {
-                borderColor: 'rgb(54, 162, 235)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)'
-            }, // Blau
-            {
-                borderColor: 'rgb(255, 205, 86)',
-                backgroundColor: 'rgba(255, 205, 86, 0.2)'
-            }, // Gelb
-            {
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)'
-            } // Grün
-        ];
-
         // Daten für das Chart vorbereiten
         const chartData = {
-            labels: ['Anomaly', 'Confirmed', 'Failure', 'Measurement'],
+            labels: [], // Hier werden die Messdaten eingefügt
             datasets: [{
-                    label: 'Anomaly Count',
-                    data: [data.anomaly_count, 0, 0, 0],
-                    borderColor: colors[0].borderColor,
-                    backgroundColor: colors[0].backgroundColor,
-                    fill: true,
-                },
-                {
-                    label: 'Confirmed Count',
-                    data: [0, data.confirmed_count, 0, 0],
-                    borderColor: colors[1].borderColor,
-                    backgroundColor: colors[1].backgroundColor,
-                    fill: true,
-                },
-                {
-                    label: 'Failure Count',
-                    data: [0, 0, data.failure_count, 0],
-                    borderColor: colors[2].borderColor,
-                    backgroundColor: colors[2].backgroundColor,
-                    fill: true,
-                },
-                {
-                    label: 'Measurement Count',
-                    data: [0, 0, 0, data.measurement_count],
-                    borderColor: colors[3].borderColor,
-                    backgroundColor: colors[3].backgroundColor,
-                    fill: true,
-                }
-            ]
+                label: 'Anomaly Count',
+                data: [],
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+            },
+            {
+                label: 'Confirmed Count',
+                data: [],
+                borderColor: 'rgb(54, 162, 235)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+            },
+            {
+                label: 'Failure Count',
+                data: [],
+                borderColor: 'rgb(255, 205, 86)',
+                backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                fill: true,
+            },
+            {
+                label: 'Measurement Count',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
         };
+
+        // Daten für das Chart aus den erhaltenen Daten extrahieren
+        data.forEach(entry => {
+            chartData.labels.push(convertDate(entry.measurement_start_day));
+            chartData.datasets[0].data.push(entry.anomaly_count);
+            chartData.datasets[1].data.push(entry.confirmed_count);
+            chartData.datasets[2].data.push(entry.failure_count);
+            chartData.datasets[3].data.push(entry.measurement_count);
+        });
 
         // Optionen für das Chart
         const options = {
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Measurement Start Date'
+                    }
+                },
                 y: {
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    },
                     beginAtZero: true
                 }
             }
@@ -197,7 +198,7 @@ async function fetchDataAndCreateChart(url) {
         // Chart erstellen
         const ctx = document.getElementById('myChart').getContext('2d');
         new Chart(ctx, {
-            type: 'bar', // Ändere zu 'bar', um ein Balkendiagramm zu verwenden
+            type: 'line',
             data: chartData,
             options: options
         });
@@ -205,6 +206,7 @@ async function fetchDataAndCreateChart(url) {
         console.error('Fehler beim Abrufen und Erstellen des Diagramms:', error);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     await updateDropdownMenu();
@@ -240,4 +242,15 @@ function extractNameAndDomain(url) {
 
     console.log(name + '.' + domain);
     return name + '.' + domain;
+}
+
+function convertDate(dateStr) {
+    var date = new Date(dateStr);
+
+    function pad(number) {
+        return (number < 10) ? '0' + number : number;
+    }
+
+    var formattedDate = pad(date.getDate()) + '.' + pad(date.getMonth() + 1) + '.' + date.getFullYear();
+    return formattedDate;
 }

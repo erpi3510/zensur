@@ -156,7 +156,7 @@ function closePage() {
 
 function report(url) {
     const currentDate = new Date();
-    // Daten, die Sie übertragen möchten
+    
     const data = {
         url: url,
         date: convertDate(currentDate),

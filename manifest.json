@@ -9,7 +9,9 @@
       "storage",
       "scripting",
       "notifications",
-      "topSites"
+      "topSites",
+      "scripting",
+      "declarativeNetRequest"
     ],
     "host_permissions": [
       "<all_urls>"
@@ -25,6 +27,15 @@
         "48": "images/icon-48.png",
         "128": "images/icon-128.png"
       }
+    },
+    "declarative_net_request": {
+      "rule_resources": [
+        {
+          "id": "ruleset_2",
+          "enabled": false,
+          "path": "ruleset_2.json"
+        }
+      ]
     },
     "options_page": "extra.html",
     "icons": {

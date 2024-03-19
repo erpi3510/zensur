@@ -43,7 +43,7 @@ function checkTabURL(tabId, url) {
                                 storageManage(urls);
                             } else {
                                 showNotificationBlocked(data);
-                                console.log('URL not found on block list');
+                                console.log('URL not found on block list notif');
                 
                             }
                         });
@@ -65,7 +65,7 @@ function checkTabURL(tabId, url) {
 }
 
 
-chrome.tabs.onCreated.addListener(function (tab) {
+chrome.tabs.onCreated.addListener(async function (tab) {
     checkTabURL(tab.id, tab.url);
 });
 
@@ -80,7 +80,63 @@ chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
 });
 
 
+// Funktion zum Setzen der Blockierungsregeln
+async function setBlockRules(blockUrls) {
+    blockUrls.forEach(async (urlObject, index) => {
+        let id = index + 1;
+        let domain = urlObject.url;
+      
+        await chrome.declarativeNetRequest.updateDynamicRules({
+            addRules: [{
+                "id": id,
+                "priority": 1,
+                "action": { "type": "block" },
+                "condition": { "urlFilter": domain, "resourceTypes": ["main_frame"] }
+            }],
+            removeRuleIds: [id]
+        });
+    });
+  }
+  
+  // Funktion zum Entfernen aller Blockierungsregeln
+  async function removeBlockRules() {
+    chrome.declarativeNetRequest.getDynamicRules(previousRules => {
+        const previousRuleIds = previousRules.map(rule => rule.id);
+        chrome.declarativeNetRequest.updateDynamicRules({
+          removeRuleIds: previousRuleIds
+        });
+      });
+    
+      console.log("Alle Blockierungsregeln entfernt");
+  }
+  
+  // Höre auf Änderungen in der Chrome-Storage
+  chrome.storage.onChanged.addListener(async function(changes, namespace) {
+    if (changes.modus) {
+      let modusValue = changes.modus.newValue || false;
+      if (modusValue) {
+        const response = await fetch('http://localhost:3003/urls/blocked');
+        const blockUrls = await response.json();
+        await setBlockRules(blockUrls);
+      } else {
+        await removeBlockRules();
+      }
 
+      console.log("änderung");
+    }
+  });
+  
+  // Setze initial die Blockierungsregeln basierend auf dem aktuellen Modus
+  chrome.storage.local.get("modus", async function(data) {
+    let modusValue = data.modus || false;
+    if (modusValue) {
+      const response = await fetch('http://localhost:3003/urls/blocked');
+      const blockUrls = await response.json();
+      await setBlockRules(blockUrls);
+    }
+  });
+  
+  
 
 function extractNameAndDomain(url) {
     // URL analysieren, um die hostname Eigenschaft zu erhalten

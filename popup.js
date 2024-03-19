@@ -46,7 +46,7 @@ const tabs = await chrome.tabs.query({
             // Überprüfe, ob die Antwort erfolgreich war (Status 200)
             if (response.ok) {
                 const data = await response.json();
-                handleUrls(data);
+                handleUrls(data,extractNameAndDomain(url));
 
             } else {
                 handleUrls();
@@ -82,7 +82,28 @@ function extractNameAndDomain(url) {
 }
 
 
-function handleUrls(data) {
+async function handleUrls(data,url) {
+    var check = false;
+        try {
+            const response = await fetch('http://localhost:3003/data/urlBlocked/' + url);
+
+            // Überprüfe, ob die Antwort erfolgreich war (Status 200)
+            if (response.ok) {
+                const dataBlocked = await response.json();
+                check = true;
+                storageManage(urls);
+
+            } else {
+                fetchBlockedUrls();
+                console.log('Error fetching blocked URLs:12', response.statusText);
+                // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+            }
+        } catch (error) {
+            console.log('Error fetching blocked URLs:22', error);
+            // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+        }
+    
+
     if (data) {
         document.getElementById("ano_counted").innerHTML = data.anomaly_count;
         document.getElementById("con_count").innerHTML = data.confirmed_count;
@@ -100,25 +121,31 @@ function handleUrls(data) {
     var statusDiv = document.getElementById("status_url");
     var iconDiv = document.getElementById("icon_infos");
 
-    if (data && data.confirmed_count > 0) {
+    if(check){
         status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
-    } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-        status = document.getElementById("status_url").innerHTML = '&nbsp;sicher';
-        statusDiv.style.backgroundColor = "#4CAF50";
-        statusDiv.style.borderColor = "white";
-        document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
-    } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-        document.getElementById("status_url").innerHTML = '&nbsp;warnung';
-        statusDiv.style.backgroundColor = "#FFA500";
-        document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
-    } else {
-        document.getElementById("status_url").innerHTML = '&nbsp;unbekannt';
-        statusDiv.style.backgroundColor = "#757575";
-        document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
-        statusDiv.style.borderColor = "white";
-        iconDiv.style.color = "#FFA500";
+    }else {
+        if (data && data.confirmed_count > 0) {
+            status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
+            document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
+            statusDiv.style.backgroundColor = "#FF7E07";
+        } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
+            status = document.getElementById("status_url").innerHTML = '&nbsp;sicher';
+            statusDiv.style.backgroundColor = "#4CAF50";
+            statusDiv.style.borderColor = "white";
+            document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
+        } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
+            document.getElementById("status_url").innerHTML = '&nbsp;warnung';
+            statusDiv.style.backgroundColor = "#FFA500";
+            document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
+        } else {
+            document.getElementById("status_url").innerHTML = '&nbsp;unbekannt';
+            statusDiv.style.backgroundColor = "#757575";
+            document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
+            statusDiv.style.borderColor = "white";
+            iconDiv.style.color = "#FFA500";
+        }
     }
 
 }
@@ -240,40 +267,40 @@ function addToBlockedUrls(url) {
 }
 
 
-// $(document).ready(function() {
-//     // Beim Laden der Seite Modus aus dem Storage abrufen
-//     chrome.storage.local.get("modus", function(data) {
-//       var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
-//       if (modusValue) {
-//         // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-//         document.getElementById("flexSwitchValue").innerHTML = "Schwer";
-//         console.log('Schalter eingeschaltet');
-//       } else {
-//         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-//         document.getElementById("flexSwitchValue").innerHTML = "Normal";
-//         console.log('Schalter ausgeschaltet');
-//       }
-//       $('#flexSwitchCheckDefault').prop('checked', modusValue);
-//     });
+$(document).ready(function() {
+    // Beim Laden der Seite Modus aus dem Storage abrufen
+    chrome.storage.local.get("modus", function(data) {
+      var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
+      if (modusValue) {
+        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+        document.getElementById("flexSwitchValue").innerHTML = "Hard block";
+        console.log('Schalter eingeschaltet');
+      } else {
+        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+        document.getElementById("flexSwitchValue").innerHTML = "Normal";
+        console.log('Schalter ausgeschaltet');
+      }
+      $('#flexSwitchCheckDefault').prop('checked', modusValue);
+    });
   
-//     // Event-Handler für den Schalter hinzufügen
-//     $('#flexSwitchCheckDefault').change(function() {
-//       var checked = $(this).prop('checked');
+    // Event-Handler für den Schalter hinzufügen
+    $('#flexSwitchCheckDefault').change(function() {
+      var checked = $(this).prop('checked');
       
-//       // Speichern des Booleschen Werts im Storage
-//       chrome.storage.local.set({ "modus": checked });
+      // Speichern des Booleschen Werts im Storage
+      chrome.storage.local.set({ "modus": checked });
 
-//       if (checked) {
-//         // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-//         document.getElementById("flexSwitchValue").innerHTML = "Schwer";
-//         console.log('Schalter eingeschaltet');
-//       } else {
-//         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-//         document.getElementById("flexSwitchValue").innerHTML = "Normal"
-//         console.log('Schalter ausgeschaltet');
-//       }
-//     });
-//   });
+      if (checked) {
+        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+        document.getElementById("flexSwitchValue").innerHTML = "hard Block";
+        console.log('Schalter eingeschaltet');
+      } else {
+        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+        document.getElementById("flexSwitchValue").innerHTML = "Normal"
+        console.log('Schalter ausgeschaltet');
+      }
+    });
+  });
   
 
       function modusOnLoad(){

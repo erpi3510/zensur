@@ -28,15 +28,6 @@
         "128": "images/icon-128.png"
       }
     },
-    "declarative_net_request": {
-      "rule_resources": [
-        {
-          "id": "ruleset_2",
-          "enabled": false,
-          "path": "ruleset_2.json"
-        }
-      ]
-    },
     "options_page": "extra.html",
     "icons": {
         "16": "images/icon-16.png",

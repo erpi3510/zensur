@@ -96,6 +96,16 @@ async function setBlockRules(blockUrls) {
             removeRuleIds: [id]
         });
     });
+    var httpCount = blockUrls.length+1;
+    await chrome.declarativeNetRequest.updateDynamicRules({
+        addRules: [{
+            "id": httpCount,
+            "priority": 1,
+            "action": { "type": "block" },
+            "condition": { "urlFilter": "|http:*", "resourceTypes": ["main_frame"] }
+        }],
+        removeRuleIds: [httpCount]
+    });
   }
   
   // Funktion zum Entfernen aller Blockierungsregeln

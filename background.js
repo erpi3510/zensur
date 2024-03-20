@@ -193,11 +193,11 @@ function handleBlockedUrls(data, urls) {
 
 function showNotificationBlocked(data) {
     const iconUrl = 'images/icon_16.png';
-
+    countNotif();
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht' + data.url,
+        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht ' + data.url,
         message: 'Es gab eine Warnmeldung',
         silent: false,
     }, function (notificationId) {
@@ -216,7 +216,7 @@ function showNotificationBlocked(data) {
 
 function showNotification() {
     const iconUrl = 'images/icon_16.png';
-
+    countNotif();
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
@@ -294,5 +294,21 @@ function blockOrAllowRequest(details) {
             return { cancel: false }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
         });
 }
+
+function countNotif(){
+    // Zuerst die aktuelle Anzahl der Benachrichtigungen abrufen
+    chrome.storage.local.get(['notificationCount'], function(result) {
+        // Aktuelle Anzahl holen oder 0 setzen, falls noch nicht gesetzt
+        let currentCount = result.notificationCount || 0;
+        // Zählung um eins erhöhen
+        let newCount = currentCount + 1;
+
+        // Die neue Zählung speichern
+        chrome.storage.local.set({notificationCount: newCount}, function() {
+            console.log(`Notification count updated to ${newCount}`);
+        });
+    });
+}
+
 
 //clearStorage();

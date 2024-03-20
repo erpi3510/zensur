@@ -125,11 +125,14 @@ async function handleUrls(data,url) {
         status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
+        document.getElementById('ignored').disabled = false;
+
     }else {
         if (data && data.confirmed_count > 0) {
             status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
             document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
             statusDiv.style.backgroundColor = "#FF7E07";
+            document.getElementById('ignored').disabled = false;
         } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
             status = document.getElementById("status_url").innerHTML = '&nbsp;sicher';
             statusDiv.style.backgroundColor = "#4CAF50";

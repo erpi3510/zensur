@@ -1,4 +1,4 @@
-var location = 'localhost';
+var location = '212.132.103.63';
 const tabs = await chrome.tabs.query({
     'active': true,
     'lastFocusedWindow': true

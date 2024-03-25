@@ -1,4 +1,4 @@
-var location = 'localhost';
+var location = '212.132.103.63';
 chrome.topSites.get((topSites) => {
 
     //document.getElementById("topurls").innerHTML = JSON.stringify(topSites[0].url);

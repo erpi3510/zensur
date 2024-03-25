@@ -1,4 +1,4 @@
-var location = 'localhost';
+var location = '212.132.103.63';
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 

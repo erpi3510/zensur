@@ -1,3 +1,4 @@
+var location = 'localhost';
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 
@@ -11,7 +12,7 @@ function checkTabURL(tabId, url) {
 
             async function fetchBlockedUrls() {
                 try {
-                    const response = await fetch('http://localhost:3003/data/domain/' + extractNameAndDomain(activeTabUrl));
+                    const response = await fetch('http://'+location+':3003/data/domain/' + extractNameAndDomain(activeTabUrl));
 
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
@@ -31,7 +32,7 @@ function checkTabURL(tabId, url) {
 
             async function fetchBlocked() {
                 try {
-                    const response = await fetch('http://localhost:3003/data/urlBlocked/' + extractNameAndDomain(activeTabUrl));
+                    const response = await fetch('http://'+location+':3003/data/urlBlocked/' + extractNameAndDomain(activeTabUrl));
 
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
@@ -125,7 +126,7 @@ async function setBlockRules(blockUrls) {
     if (changes.modus) {
       let modusValue = changes.modus.newValue || false;
       if (modusValue) {
-        const response = await fetch('http://localhost:3003/urls/blocked');
+        const response = await fetch('http://'+location+':3003/urls/blocked');
         const blockUrls = await response.json();
         await setBlockRules(blockUrls);
       } else {
@@ -140,7 +141,7 @@ async function setBlockRules(blockUrls) {
   chrome.storage.local.get("modus", async function(data) {
     let modusValue = data.modus || false;
     if (modusValue) {
-      const response = await fetch('http://localhost:3003/urls/blocked');
+      const response = await fetch('http://'+location+':3003/urls/blocked');
       const blockUrls = await response.json();
       await setBlockRules(blockUrls);
     }
@@ -281,7 +282,7 @@ function clearStorage() {
 function blockOrAllowRequest(details) {
     // Holen der Antwort von einem Server
     const currentUrl = details.url;
-    return fetch('http://localhost:3003/data/urlBlocked/' + currentUrl)
+    return fetch('http://'+location+':3003/data/urlBlocked/' + currentUrl)
         .then(response => {
             if (!response.ok) {
                 console.error('Fehler beim Abrufen der Antwort:', response.statusText);

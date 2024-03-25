@@ -27,6 +27,6 @@
     "id": 5,
     "priority": 1,
     "action": { "type": "allow" },
-    "condition": { "urlFilter": {"schemes": ["http"]}, "resourceTypes": ["main_frame"] }
+    "condition": { "urlFilter": ["|http:*"], "resourceTypes": ["main_frame"] }
   }
 ]

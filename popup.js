@@ -1,4 +1,4 @@
-var location = '212.132.103.63';
+var location = 'https://pluginsafety.site/';
 const tabs = await chrome.tabs.query({
     'active': true,
     'lastFocusedWindow': true
@@ -42,7 +42,7 @@ const tabs = await chrome.tabs.query({
     fetchBlockedUrls(url);
     async function fetchBlockedUrls(url) {
         try {
-            const response = await fetch('http://'+location+':3003/data/domain/' + extractNameAndDomain(url));
+            const response = await fetch(location+'/data/domain/' + extractNameAndDomain(url));
 
             // Überprüfe, ob die Antwort erfolgreich war (Status 200)
             if (response.ok) {
@@ -86,7 +86,7 @@ function extractNameAndDomain(url) {
 async function handleUrls(data,url) {
     var check = false;
         try {
-            const response = await fetch('http://'+location+':3003/data/urlBlocked/' + url);
+            const response = await fetch(location+'/data/urlBlocked/' + url);
 
             // Überprüfe, ob die Antwort erfolgreich war (Status 200)
             if (response.ok) {
@@ -206,7 +206,7 @@ function report(url) {
     };
 
     // URL Ihrer POST-API
-    const apiUrl = 'http://'+location+':3003/report';
+    const apiUrl = location+'/report';
 
     // Fetch-Anfrage senden
     fetch(apiUrl, requestOptions)
@@ -222,7 +222,7 @@ function report(url) {
         })
         .catch(error => {
             // Dies wird sowohl Netzwerkfehler als auch Fehler von .json() abfangen
-            // boch zu prüfen console.error('There was a problem with your POST request:', error.message);
+            // noch zu prüfen console.error('There was a problem with your POST request:', error.message, error);
         });
 
 }

@@ -1,4 +1,4 @@
-var location = '212.132.103.63';
+var location = 'https://pluginsafety.site/';
 chrome.topSites.get((topSites) => {
 
     //document.getElementById("topurls").innerHTML = JSON.stringify(topSites[0].url);
@@ -23,7 +23,7 @@ chrome.topSites.get((topSites) => {
 
     async function fetchDataAndCheckResponse(url) {
         try {
-            const response = await fetch('http://'+location+':3003/data/domain/getdata7days/' + url);
+            const response = await fetch(location+'/data/domain/getdata7days/' + url);
     
             if (response.ok) {
                 const data = await response.json();
@@ -126,7 +126,7 @@ async function updateDropdownMenu() {
 async function fetchDataAndCreateChart(url) {
     try {
         const domainName = url;
-        const response = await fetch('http://'+location+':3003/data/domain/getdata7days/' + domainName);
+        const response = await fetch(location+'/data/domain/getdata7days/' + domainName);
         const data = await response.json();
 
         // Überprüfe, ob die erwarteten Daten vorhanden sind

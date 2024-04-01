@@ -235,15 +235,6 @@ function reportMessage(url) {
         title: 'Seite ' + url,
         message: url + ' Seite gemeldet',
         silent: false,
-    }, function (notificationId) {
-        chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
-            if (clickedNotificationId === notificationId) {
-                chrome.tabs.create({
-                    url: 'https://tapas.io/'
-                });
-
-            }
-        });
     });
 }
 

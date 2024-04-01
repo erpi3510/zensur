@@ -1,4 +1,4 @@
-var location = '212.132.103.63';
+var location = 'https://pluginsafety.site/';
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 
@@ -18,7 +18,7 @@ function checkTabURL(tabId, url) {
                     if (response.ok) {
                         const data = await response.json();
                         handleBlockedUrls(data, extractNameAndDomain(activeTabUrl));
-
+                        //console.log('founded', response.statusText);
                     } else {
                         handleBlockedUrls();
                         console.log('Error fetching blocked URLs:1', response.statusText);
@@ -178,7 +178,7 @@ function handleBlockedUrls(data, urls) {
                 console.log('URL:', urls, 'Date:', result[urls]);
                 storageManage(urls);
             } else {
-                showNotification();
+                showNotification(urls);
                 console.log('URL not found');
 
             }
@@ -215,20 +215,20 @@ function showNotificationBlocked(data) {
 }
 
 
-function showNotification() {
+function showNotification(url) {
     const iconUrl = 'images/icon_16.png';
     countNotif();
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht',
+        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht oder verhält sich nicht richtig',
         message: 'Es gab eine Warnmeldung',
         silent: false,
     }, function (notificationId) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
             if (clickedNotificationId === notificationId) {
                 chrome.tabs.create({
-                    url: 'https://chat.openai.com'
+                    url: 'https://explorer.ooni.org/de/search?'+getDateRange()+'&probe_cc=DE&test_name=web_connectivity&failure=true&domain='+url+'&only=confirmed'
                 });
 
             }
@@ -313,3 +313,31 @@ function countNotif(){
 
 
 //clearStorage();
+
+function getDateRange() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1); // Ein Tag zum aktuellen Datum hinzufügen
+
+    const yearSince = today.getFullYear();
+    let monthSince = today.getMonth() + 1;
+    let daySince = today.getDate();
+
+    // Führende Nullen hinzufügen, wenn der Monat oder Tag einstellig ist
+    monthSince = monthSince < 10 ? '0' + monthSince : monthSince;
+    daySince = daySince < 10 ? '0' + daySince : daySince;
+
+    const yearUntil = tomorrow.getFullYear();
+    let monthUntil = tomorrow.getMonth() + 1;
+    let dayUntil = tomorrow.getDate();
+
+    // Führende Nullen hinzufügen, wenn der Monat oder Tag einstellig ist
+    monthUntil = monthUntil < 10 ? '0' + monthUntil : monthUntil;
+    dayUntil = dayUntil < 10 ? '0' + dayUntil : dayUntil;
+
+    const since = `${yearSince}-${monthSince}-${daySince}`;
+    const until = `${yearUntil}-${monthUntil}-${dayUntil}`;
+    var time = today.getHours()+':'+today.getMinutes();
+    console.log(`since=${since}&until=${until}`+' Time '+time); 
+    return `since=${since}&until=${until}`;
+}

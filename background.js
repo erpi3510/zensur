@@ -186,9 +186,13 @@ function handleBlockedUrls(data, urls) {
 
 
         changeIcon('images/icon_48.png');
+    }else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
+        changeIcon('images/icon-48.png');
+    } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
+        changeIcon('images/warning-sign_128.png');
     } else {
         // Keine Übereinstimmung gefunden
-        changeIcon('images/icon-48.png');
+        changeIcon('images/denken-128.png');
     }
 }
 
@@ -243,6 +247,24 @@ function changeIcon(iconPath) {
             "32": iconPath.replace('48', '32'),
             "48": iconPath,
             "128": iconPath.replace('48', '128')
+        }
+    });
+
+//    chrome.action.setBadgeText(
+//         {
+//           text: '1',
+         
+//         }
+//       ); 
+}
+
+function changes() {
+    chrome.action.setIcon({
+        path: {
+            "16": "images/warm-16.png",
+            "32": "images/warn-32.png",
+            "48": "images/warn-48.png",
+            "128": "images/warn-128.png"
         }
     });
 }

@@ -170,6 +170,7 @@ function extractNameAndDomain(url) {
 
 
 function handleBlockedUrls(data, urls) {
+    var state;
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
         //console.log(data.id+' '+data.confirmed_count);
@@ -184,15 +185,18 @@ function handleBlockedUrls(data, urls) {
             }
         });
 
-
-        changeIcon('images/icon_48.png');
+    state = 'nicht sichere seite';
+        changeIcon('images/icon_48.png', state);
     }else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-        changeIcon('images/icon-48.png');
+        state = 'seite ist safe';
+        changeIcon('images/icon-48.png',state);
     } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-        changeIcon('images/warning-sign_128.png');
+        state = 'passen sie hier auf';
+        changeIcon('images/warning-sign_128.png',state);
     } else {
         // Keine Übereinstimmung gefunden
-        changeIcon('images/denken-128.png');
+        state = 'Unbekannt';
+        changeIcon('images/denken-128.png',state);
     }
 }
 
@@ -215,7 +219,8 @@ function showNotificationBlocked(data) {
             }
         });
     });
-    changeIcon('images/icon_48.png');
+    var state = 'nicht sichere seite';
+    changeIcon('images/icon_48.png',state);
 }
 
 
@@ -240,7 +245,7 @@ function showNotification(url) {
     });
 }
 
-function changeIcon(iconPath) {
+function changeIcon(iconPath,state) {
     chrome.action.setIcon({
         path: {
             "16": iconPath,
@@ -256,6 +261,10 @@ function changeIcon(iconPath) {
          
 //         }
 //       ); 
+chrome.action.setTitle({
+    title: state
+  });
+  
 }
 
 function changes() {

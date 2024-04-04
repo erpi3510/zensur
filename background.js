@@ -1,4 +1,5 @@
 var location = 'https://pluginsafety.site/';
+
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 
@@ -9,18 +10,19 @@ function checkTabURL(tabId, url) {
         }, function (tabs) {
             var activeTab = tabs[0];
             var activeTabUrl = activeTab.url;
-
+            tabId = activeTab.id;
+            //console.log(JSON.stringify(activeTab.id));
             async function fetchBlockedUrls() {
                 try {
-                    const response = await fetch(location+'/data/domain/' + extractNameAndDomain(activeTabUrl));
+                    const response = await fetch(location + '/data/domain/' + extractNameAndDomain(activeTabUrl));
 
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
                         const data = await response.json();
-                        handleBlockedUrls(data, extractNameAndDomain(activeTabUrl));
+                        handleBlockedUrls(data, extractNameAndDomain(activeTabUrl), tabId);
                         //console.log('founded', response.statusText);
                     } else {
-                        handleBlockedUrls();
+                        handleBlockedUrlsNull(tabId);
                         console.log('Error fetching blocked URLs:1', response.statusText);
                         // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
                     }
@@ -32,20 +34,20 @@ function checkTabURL(tabId, url) {
 
             async function fetchBlocked() {
                 try {
-                    const response = await fetch(location+'/data/urlBlocked/' + extractNameAndDomain(activeTabUrl));
+                    const response = await fetch(location + '/data/urlBlocked/' + extractNameAndDomain(activeTabUrl));
 
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
                         const data = await response.json();
-                       
+
                         chrome.storage.local.get([extractNameAndDomain(activeTabUrl)], function (result) {
                             if (result[extractNameAndDomain(activeTabUrl)]) {
                                 console.log('URL:', extractNameAndDomain(activeTabUrl), 'Date:', result[extractNameAndDomain(activeTabUrl)]);
                                 storageManage(urls);
                             } else {
-                                showNotificationBlocked(data);
+                                showNotificationBlocked(data, tabId);
                                 console.log('URL not found on block list notif');
-                
+
                             }
                         });
 
@@ -86,68 +88,78 @@ async function setBlockRules(blockUrls) {
     blockUrls.forEach(async (urlObject, index) => {
         let id = index + 1;
         let domain = urlObject.url;
-      
+
         await chrome.declarativeNetRequest.updateDynamicRules({
             addRules: [{
                 "id": id,
                 "priority": 1,
-                "action": { "type": "block" },
-                "condition": { "urlFilter": domain, "resourceTypes": ["main_frame"] }
+                "action": {
+                    "type": "block"
+                },
+                "condition": {
+                    "urlFilter": domain,
+                    "resourceTypes": ["main_frame"]
+                }
             }],
             removeRuleIds: [id]
         });
     });
-    var httpCount = blockUrls.length+1;
+    var httpCount = blockUrls.length + 1;
     await chrome.declarativeNetRequest.updateDynamicRules({
         addRules: [{
             "id": httpCount,
             "priority": 1,
-            "action": { "type": "block" },
-            "condition": { "urlFilter": "|http:*", "resourceTypes": ["main_frame"] }
+            "action": {
+                "type": "block"
+            },
+            "condition": {
+                "urlFilter": "|http:*",
+                "resourceTypes": ["main_frame"]
+            }
         }],
         removeRuleIds: [httpCount]
     });
-  }
-  
-  // Funktion zum Entfernen aller Blockierungsregeln
-  async function removeBlockRules() {
+}
+
+// Funktion zum Entfernen aller Blockierungsregeln
+async function removeBlockRules() {
     chrome.declarativeNetRequest.getDynamicRules(previousRules => {
         const previousRuleIds = previousRules.map(rule => rule.id);
         chrome.declarativeNetRequest.updateDynamicRules({
-          removeRuleIds: previousRuleIds
+            removeRuleIds: previousRuleIds
         });
-      });
-    
-      console.log("Alle Blockierungsregeln entfernt");
-  }
-  
-  // Höre auf Änderungen in der Chrome-Storage
-  chrome.storage.onChanged.addListener(async function(changes, namespace) {
-    if (changes.modus) {
-      let modusValue = changes.modus.newValue || false;
-      if (modusValue) {
-        const response = await fetch(location+'/urls/blocked');
-        const blockUrls = await response.json();
-        await setBlockRules(blockUrls);
-      } else {
-        await removeBlockRules();
-      }
+    });
 
-      console.log("änderung");
+    console.log("Alle Blockierungsregeln entfernt");
+}
+
+// Höre auf Änderungen in der Chrome-Storage
+chrome.storage.onChanged.addListener(async function (changes, namespace) {
+    if (changes.modus) {
+        let modusValue = changes.modus.newValue || false;
+        if (modusValue) {
+            const response = await fetch(location + '/urls/blocked');
+            const blockUrls = await response.json();
+            await setBlockRules(blockUrls);
+        } else {
+            await removeBlockRules();
+        }
+
+        console.log("änderung");
     }
-  });
-  
-  // Setze initial die Blockierungsregeln basierend auf dem aktuellen Modus
-  chrome.storage.local.get("modus", async function(data) {
+});
+
+// Setze initial die Blockierungsregeln basierend auf dem aktuellen Modus
+chrome.storage.local.get("modus", async function (data) {
     let modusValue = data.modus || false;
     if (modusValue) {
-      const response = await fetch(location+'/urls/blocked');
-      const blockUrls = await response.json();
-      await setBlockRules(blockUrls);
+        const response = await fetch(location + '/urls/blocked');
+        const blockUrls = await response.json();
+        await setBlockRules(blockUrls);
     }
-  });
-  
-  
+});
+
+
 
 function extractNameAndDomain(url) {
     // URL analysieren, um die hostname Eigenschaft zu erhalten
@@ -169,7 +181,7 @@ function extractNameAndDomain(url) {
 }
 
 
-function handleBlockedUrls(data, urls) {
+function handleBlockedUrls(data, urls, tabId) {
     var state;
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
@@ -185,22 +197,32 @@ function handleBlockedUrls(data, urls) {
             }
         });
 
-    state = 'nicht sichere seite';
-        changeIcon('images/icon_48.png', state);
-    }else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
+        state = 'nicht sichere seite';
+        changeIcon('images/icon_48.png', state, tabId);
+        setBadge(data.anomaly_count, tabId);
+    } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
         state = 'seite ist safe';
-        changeIcon('images/icon-48.png',state);
+        changeIcon('images/icon-48.png', state, tabId);
+        setBadge(data.anomaly_count, tabId);
     } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
         state = 'passen sie hier auf';
-        changeIcon('images/warning-sign_128.png',state);
+        changeIcon('images/warning-sign_128.png', state, tabId);
+        setBadge(data.anomaly_count, tabId);
     } else {
         // Keine Übereinstimmung gefunden
         state = 'Unbekannt';
-        changeIcon('images/denken-128.png',state);
+        changeIcon('images/denken-128.png', state, tabId);
+        setBadge(data.anomaly_count, tabId);
     }
 }
 
-function showNotificationBlocked(data) {
+function handleBlockedUrlsNull(tabId) {
+    var state;
+    state = 'Unbekannt';
+    changeIcon('images/denken-128.png', state, tabId);
+}
+
+function showNotificationBlocked(data, tabId) {
     const iconUrl = 'images/icon_16.png';
     countNotif();
     chrome.notifications.create({
@@ -220,7 +242,8 @@ function showNotificationBlocked(data) {
         });
     });
     var state = 'nicht sichere seite';
-    changeIcon('images/icon_48.png',state);
+    changeIcon('images/icon_48.png', state, tabId);
+
 }
 
 
@@ -237,7 +260,7 @@ function showNotification(url) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
             if (clickedNotificationId === notificationId) {
                 chrome.tabs.create({
-                    url: 'https://explorer.ooni.org/de/search?'+getDateRange()+'&probe_cc=DE&test_name=web_connectivity&failure=true&domain='+url+'&only=confirmed'
+                    url: 'https://explorer.ooni.org/de/search?' + getDateRange() + '&probe_cc=DE&test_name=web_connectivity&failure=true&domain=' + url + '&only=confirmed'
                 });
 
             }
@@ -245,26 +268,38 @@ function showNotification(url) {
     });
 }
 
-function changeIcon(iconPath,state) {
+function changeIcon(iconPath, state, tabId) {
     chrome.action.setIcon({
         path: {
             "16": iconPath,
             "32": iconPath.replace('48', '32'),
             "48": iconPath,
             "128": iconPath.replace('48', '128')
-        }
+        },
+        tabId: tabId
     });
 
-//    chrome.action.setBadgeText(
-//         {
-//           text: '1',
-         
-//         }
-//       ); 
-chrome.action.setTitle({
-    title: state
-  });
-  
+    chrome.action.setTitle({
+        title: state.toString(),
+        tabId: tabId
+    });
+
+    chrome.action.setTitle({
+        title: state.toString(),
+        tabId: tabId
+    });
+
+}
+
+function setBadge(count, tabId) {
+    if(count > 0){
+        chrome.action.setBadgeText({
+            text: count.toString(),
+            tabId: tabId,
+        });
+        console.log(tabId+' da');
+    }
+
 }
 
 function changes() {
@@ -310,33 +345,41 @@ function clearStorage() {
 }
 
 // Funktion, um die Anfrage zu blockieren oder zuzulassen
-function blockOrAllowRequest(details) {
+async function blockOrAllowRequest(details) {
     // Holen der Antwort von einem Server
     const currentUrl = details.url;
-    return fetch(location+'/data/urlBlocked/' + currentUrl)
+    return fetch(location + '/data/urlBlocked/' + currentUrl)
         .then(response => {
             if (!response.ok) {
                 console.error('Fehler beim Abrufen der Antwort:', response.statusText);
-                return { cancel: false }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
+                return {
+                    cancel: false
+                }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
             }
-            return { cancel: true }; // Blockiert die Anfrage, wenn die Antwort "OK" ist
+            return {
+                cancel: true
+            }; // Blockiert die Anfrage, wenn die Antwort "OK" ist
         })
         .catch(error => {
             console.error('Fehler beim Abrufen der Antwort:', error);
-            return { cancel: false }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
+            return {
+                cancel: false
+            }; // Standardmäßig Anfrage zulassen, falls ein Fehler auftritt
         });
 }
 
-function countNotif(){
+function countNotif() {
     // Zuerst die aktuelle Anzahl der Benachrichtigungen abrufen
-    chrome.storage.local.get(['notificationCount'], function(result) {
+    chrome.storage.local.get(['notificationCount'], function (result) {
         // Aktuelle Anzahl holen oder 0 setzen, falls noch nicht gesetzt
         let currentCount = result.notificationCount || 0;
         // Zählung um eins erhöhen
         let newCount = currentCount + 1;
 
         // Die neue Zählung speichern
-        chrome.storage.local.set({notificationCount: newCount}, function() {
+        chrome.storage.local.set({
+            notificationCount: newCount
+        }, function () {
             console.log(`Notification count updated to ${newCount}`);
         });
     });
@@ -368,7 +411,7 @@ function getDateRange() {
 
     const since = `${yearSince}-${monthSince}-${daySince}`;
     const until = `${yearUntil}-${monthUntil}-${dayUntil}`;
-    var time = today.getHours()+':'+today.getMinutes();
-    console.log(`since=${since}&until=${until}`+' Time '+time); 
+    var time = today.getHours() + ':' + today.getMinutes();
+    console.log(`since=${since}&until=${until}` + ' Time ' + time);
     return `since=${since}&until=${until}`;
 }

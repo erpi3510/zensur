@@ -42,12 +42,12 @@ const tabs = await chrome.tabs.query({
     fetchBlockedUrls(url);
     async function fetchBlockedUrls(url) {
         try {
-            const response = await fetch(location+'/data/domain/' + extractNameAndDomain(url));
+            const response = await fetch(location + '/data/domain/' + extractNameAndDomain(url));
 
             // Überprüfe, ob die Antwort erfolgreich war (Status 200)
             if (response.ok) {
                 const data = await response.json();
-                handleUrls(data,extractNameAndDomain(url));
+                handleUrls(data, extractNameAndDomain(url));
 
             } else {
                 handleUrls();
@@ -83,27 +83,27 @@ function extractNameAndDomain(url) {
 }
 
 
-async function handleUrls(data,url) {
+async function handleUrls(data, url) {
     var check = false;
-        try {
-            const response = await fetch(location+'/data/urlBlocked/' + url);
+    try {
+        const response = await fetch(location + '/data/urlBlocked/' + url);
 
-            // Überprüfe, ob die Antwort erfolgreich war (Status 200)
-            if (response.ok) {
-                const dataBlocked = await response.json();
-                check = true;
-                storageManage(urls);
+        // Überprüfe, ob die Antwort erfolgreich war (Status 200)
+        if (response.ok) {
+            const dataBlocked = await response.json();
+            check = true;
+            storageManage(urls);
 
-            } else {
-                fetchBlockedUrls();
-                console.log('Error fetching blocked URLs:12', response.statusText);
-                // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
-            }
-        } catch (error) {
-            console.log('Error fetching blocked URLs:22', error);
+        } else {
+            fetchBlockedUrls();
+            console.log('Error fetching blocked URLs:12', response.statusText);
             // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
         }
-    
+    } catch (error) {
+        console.log('Error fetching blocked URLs:22', error);
+        // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+    }
+
 
     if (data) {
         document.getElementById("ano_counted").innerHTML = data.anomaly_count;
@@ -122,13 +122,13 @@ async function handleUrls(data,url) {
     var statusDiv = document.getElementById("status_url");
     var iconDiv = document.getElementById("icon_infos");
 
-    if(check){
+    if (check) {
         status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
         document.getElementById('ignored').disabled = false;
 
-    }else {
+    } else {
         if (data && data.confirmed_count > 0) {
             status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
             document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
@@ -187,7 +187,7 @@ function closePage() {
 
 function report(url) {
     const currentDate = new Date();
-    
+
     const data = {
         url: url,
         date: convertDate(currentDate),
@@ -206,7 +206,7 @@ function report(url) {
     };
 
     // URL Ihrer POST-API
-    const apiUrl = location+'/report';
+    const apiUrl = location + '/report';
 
     // Fetch-Anfrage senden
     fetch(apiUrl, requestOptions)
@@ -261,51 +261,71 @@ function addToBlockedUrls(url) {
     });
 }
 
+function getTabId() {
+    // Verwenden Sie die Chrome-Tab-API, um den aktuellen Tab abzurufen
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function (tabs) {
+        // Extrahieren Sie die Tab-ID aus dem Tab-Objekt
+        var tabId = tabs[0].id;
+        return tabId;
 
-$(document).ready(function() {
+    });
+}
+
+$(document).ready(function () {
     // Beim Laden der Seite Modus aus dem Storage abrufen
-    chrome.storage.local.get("modus", function(data) {
-      var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
-      if (modusValue) {
-        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-        document.getElementById("flexSwitchValue").innerHTML = "Hard block";
-        console.log('Schalter eingeschaltet');
-      } else {
-        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-        document.getElementById("flexSwitchValue").innerHTML = "Normal";
-        console.log('Schalter ausgeschaltet');
-      }
-      $('#flexSwitchCheckDefault').prop('checked', modusValue);
+    chrome.storage.local.get("modus", function (data) {
+        var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
+        if (modusValue) {
+            // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+            document.getElementById("flexSwitchValue").innerHTML = "Hard block";
+            console.log('Schalter eingeschaltet');
+        } else {
+            // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+            document.getElementById("flexSwitchValue").innerHTML = "Normal";
+            console.log('Schalter ausgeschaltet');
+        }
+        $('#flexSwitchCheckDefault').prop('checked', modusValue);
     });
-  
+
     // Event-Handler für den Schalter hinzufügen
-    $('#flexSwitchCheckDefault').change(function() {
-      var checked = $(this).prop('checked');
-      
-      // Speichern des Booleschen Werts im Storage
-      chrome.storage.local.set({ "modus": checked });
+    $('#flexSwitchCheckDefault').change(function () {
+        var checked = $(this).prop('checked');
 
-      if (checked) {
-        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-        document.getElementById("flexSwitchValue").innerHTML = "hard Block";
-        console.log('Schalter eingeschaltet');
-      } else {
-        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-        document.getElementById("flexSwitchValue").innerHTML = "Normal"
-        console.log('Schalter ausgeschaltet');
-      }
+        // Speichern des Booleschen Werts im Storage
+        chrome.storage.local.set({
+            "modus": checked
+        });
+
+        if (checked) {
+            // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+            document.getElementById("flexSwitchValue").innerHTML = "hard Block";
+            console.log('Schalter eingeschaltet');
+        } else {
+            // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+            document.getElementById("flexSwitchValue").innerHTML = "Normal"
+            console.log('Schalter ausgeschaltet');
+        }
+        reloadTabAfterDelay();
     });
-  });
-  
+});
 
-      function modusOnLoad(){
-        chrome.storage.local.get("modus", function(data) {
+function reloadTabAfterDelay() {
+    setTimeout(function () {
+        chrome.tabs.reload(getTabId());
+    }, 2000); // 2000 Millisekunden = 2 Sekunden Verzögerung
+}
 
-            //document.getElementById("flexSwitchValue").innerHTML = data.modus;
-            //$('#flexSwitchCheckDefault').prop('checked', checked);
-          });
-      }
-      
+function modusOnLoad() {
+    chrome.storage.local.get("modus", function (data) {
+
+        //document.getElementById("flexSwitchValue").innerHTML = data.modus;
+        //$('#flexSwitchCheckDefault').prop('checked', checked);
+    });
+}
+
 
 
 function storageManage(url) {

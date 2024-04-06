@@ -78,8 +78,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
-
-    checkTabURL(0, 'tab.url');
+    
+    if(tab){
+        checkTabURL(tab.id, tab.url);
+    }
 });
 
 
@@ -105,6 +107,31 @@ async function setBlockRules(blockUrls) {
         });
     });
     var httpCount = blockUrls.length + 1;
+    const ooniBlock = await getUrltoBlocked();
+    
+    ooniBlock.forEach(async (urlObject, index) => {
+        
+        let id = httpCount + 1;
+        let domain = urlObject.domain;
+        console.log(id+ ' id tab');
+
+        await chrome.declarativeNetRequest.updateDynamicRules({
+            addRules: [{
+                "id": id,
+                "priority": 1,
+                "action": {
+                    "type": "block"
+                },
+                "condition": {
+                    "urlFilter": domain,
+                    "resourceTypes": ["main_frame"]
+                }
+            }],
+            removeRuleIds: [id]
+        });
+    });
+
+    
     await chrome.declarativeNetRequest.updateDynamicRules({
         addRules: [{
             "id": httpCount,
@@ -113,13 +140,38 @@ async function setBlockRules(blockUrls) {
                 "type": "block"
             },
             "condition": {
-                "urlFilter": "|http:*",
+                "urlFilter": "|http://*",
                 "resourceTypes": ["main_frame"]
             }
         }],
         removeRuleIds: [httpCount]
     });
+
 }
+
+async function getUrltoBlocked() {
+    var blockedData;
+    try {
+        const response = await fetch(location + '/urls');
+
+        // Überprüfe, ob die Antwort erfolgreich war (Status 200)
+        if (response.ok) {
+            const data = await response.json();
+
+            // Filtere die Daten und füge sie dem blockedData-Array hinzu
+            blockedData = data.filter(item => item.confirmed_count > 0);
+            
+            return blockedData;
+        } else {
+            console.log('Error fetching blocked URLs:', response.statusText);
+            // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+        }
+    } catch (error) {
+        console.log('Error fetching blocked URLs:', error);
+        // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
+    }
+}
+
 
 // Funktion zum Entfernen aller Blockierungsregeln
 async function removeBlockRules() {

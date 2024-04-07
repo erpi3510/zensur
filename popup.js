@@ -50,7 +50,7 @@ const tabs = await chrome.tabs.query({
                 handleUrls(data, extractNameAndDomain(url));
 
             } else {
-                handleUrls();
+                handleUrls('', extractNameAndDomain(url));
                 console.log('Error fetching blocked URLs:3', response.statusText);
                 // Führe alternative Aktionen aus, z.B. Standardverhalten anwenden
             }
@@ -87,12 +87,13 @@ async function handleUrls(data, url) {
     var check = false;
     try {
         const response = await fetch(location + '/data/urlBlocked/' + url);
-
+        //document.getElementById("testi").innerHTML= JSON.stringify(response);
         // Überprüfe, ob die Antwort erfolgreich war (Status 200)
         if (response.ok) {
             const dataBlocked = await response.json();
             check = true;
-            storageManage(urls);
+            
+            storageManage(url);
 
         } else {
             fetchBlockedUrls();
@@ -118,37 +119,68 @@ async function handleUrls(data, url) {
         document.getElementById("meas_count").innerHTML = 'Null';
         document.getElementById("start_day_meas").innerHTML = 'Null';
     }
+    
     var status;
     var statusDiv = document.getElementById("status_url");
     var iconDiv = document.getElementById("icon_infos");
 
     if (check) {
-        status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
+        const state ='nicht sicher';
+        status = statusDiv.innerHTML = '&nbsp;'+state+'';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
         document.getElementById('ignored').disabled = false;
 
+       
+        $(document).ready(function () {
+            $('#status_url').attr('title', state);
+        });
+
     } else {
         if (data && data.confirmed_count > 0) {
-            status = document.getElementById("status_url").innerHTML = '&nbsp;nicht sicher';
+            const state ='nicht sicher';
+            status = statusDiv.innerHTML = '&nbsp;'+state+'';
             document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
             statusDiv.style.backgroundColor = "#FF7E07";
             document.getElementById('ignored').disabled = false;
+
+           
+            $(document).ready(function () {
+                $('#status_url').attr('title', state);
+            });
         } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-            status = document.getElementById("status_url").innerHTML = '&nbsp;sicher';
+            const state ='sicher';
+            status = statusDiv.innerHTML = '&nbsp;'+state+'';
             statusDiv.style.backgroundColor = "#4CAF50";
             statusDiv.style.borderColor = "white";
             document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
+
+           
+            $(document).ready(function () {
+                $('#status_url').attr('title', state);
+            });
         } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-            document.getElementById("status_url").innerHTML = '&nbsp;warnung';
+            const state ='warnung';
+            statusDiv.innerHTML = '&nbsp;'+state+'';
             statusDiv.style.backgroundColor = "#FFA500";
             document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
+
+           
+            $(document).ready(function () {
+                $('#status_url').attr('title', state);
+            });
         } else {
-            document.getElementById("status_url").innerHTML = '&nbsp;unbekannt';
+            const state ='unbekannt';
+            statusDiv.innerHTML = '&nbsp;'+state+'';
             statusDiv.style.backgroundColor = "#757575";
             document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
             statusDiv.style.borderColor = "white";
             iconDiv.style.color = "#FFA500";
+
+           
+            $(document).ready(function () {
+                $('#status_url').attr('title', state);
+            });
         }
     }
 

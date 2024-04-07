@@ -92,7 +92,7 @@ async function handleUrls(data, url) {
         if (response.ok) {
             const dataBlocked = await response.json();
             check = true;
-            
+
             storageManage(url);
 
         } else {
@@ -119,65 +119,65 @@ async function handleUrls(data, url) {
         document.getElementById("meas_count").innerHTML = 'Null';
         document.getElementById("start_day_meas").innerHTML = 'Null';
     }
-    
+
     var status;
     var statusDiv = document.getElementById("status_url");
     var iconDiv = document.getElementById("icon_infos");
 
     if (check) {
-        const state ='nicht sicher';
-        status = statusDiv.innerHTML = '&nbsp;'+state+'';
+        const state = 'nicht sicher';
+        status = statusDiv.innerHTML = '&nbsp;' + state + '';
         document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
         statusDiv.style.backgroundColor = "#FF7E07";
         document.getElementById('ignored').disabled = false;
 
-       
+
         $(document).ready(function () {
             $('#status_url').attr('title', state);
         });
 
     } else {
         if (data && data.confirmed_count > 0) {
-            const state ='nicht sicher';
-            status = statusDiv.innerHTML = '&nbsp;'+state+'';
+            const state = 'nicht sicher';
+            status = statusDiv.innerHTML = '&nbsp;' + state + '';
             document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
             statusDiv.style.backgroundColor = "#FF7E07";
             document.getElementById('ignored').disabled = false;
 
-           
+
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
         } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-            const state ='sicher';
-            status = statusDiv.innerHTML = '&nbsp;'+state+'';
+            const state = 'sicher';
+            status = statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#4CAF50";
             statusDiv.style.borderColor = "white";
             document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
 
-           
+
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
         } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-            const state ='warnung';
-            statusDiv.innerHTML = '&nbsp;'+state+'';
+            const state = 'warnung';
+            statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#FFA500";
             document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
 
-           
+
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
         } else {
-            const state ='unbekannt';
-            statusDiv.innerHTML = '&nbsp;'+state+'';
+            const state = 'unbekannt';
+            statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#757575";
             document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
             statusDiv.style.borderColor = "white";
             iconDiv.style.color = "#FFA500";
 
-           
+
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
@@ -346,7 +346,8 @@ $(document).ready(function () {
 
 function reloadTabAfterDelay() {
     setTimeout(function () {
-        chrome.tabs.reload(getTabId());
+        //chrome.tabs.reload(getTabId()); reload somme tab
+        chrome.tabs.reload(); // reload tabs
     }, 2000); // 2000 Millisekunden = 2 Sekunden Verzögerung
 }
 

@@ -1,6 +1,6 @@
 var location = 'https://pluginsafety.site/';
 
-chrome.storage.local.clear();
+//chrome.storage.local.clear();
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 
@@ -46,8 +46,9 @@ function checkTabURL(tabId, url) {
                                 console.log('URL:', extractNameAndDomain(activeTabUrl), 'Date:', result[extractNameAndDomain(activeTabUrl)]);
                                 storageManage(urls);
                             } else {
-                                showNotificationBlocked(data, tabId);
                                 blockURL(tabId, activeTabUrl);
+                                showNotificationBlocked(data, tabId, activeTabUrl);
+                                
                                 console.log('URL not found on block list notif');
 
                             }
@@ -266,8 +267,21 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
                 // Funktion zum Leeren des Chrome-Storage für blockierte URLs  
 
             } else {
-                chrome.tabs.update(tabId, {
-                    url: "checkpage.html"
+                // Beim Laden der Seite Modus aus dem Storage abrufen
+                chrome.storage.local.get("modus", function (data) {
+                    var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
+                    if (modusValue) {
+                        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+                        
+                        console.log('Schalter eingeschaltet');
+                    } else {
+                        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+                        chrome.tabs.update(tabId, {
+                            url: "checkpage.html"
+                        });
+                       
+                        console.log('Schalter ausgeschaltet');
+                    }
                 });
                 console.log("Die URL ist nicht blockierte liste besetzt.");
             }
@@ -316,7 +330,6 @@ function showNotificationBlocked(data, tabId) {
     var state = 'nicht sichere seite';
     changeIcon('images/icon_48.png', state, tabId);
 
-
     checkIfURLBlocked(data.url);
 
     async function checkIfURLBlocked(urlToCheck) {
@@ -325,10 +338,24 @@ function showNotificationBlocked(data, tabId) {
         if (isBlocked) {
             console.log("Die URL ist blockiert schon geprüft.");
             return true;
-        } else {
-            chrome.tabs.update(tabId, {
-                url: "checkpage.html"
-            });
+        } else {            
+                // Beim Laden der Seite Modus aus dem Storage abrufen
+                chrome.storage.local.get("modus", function (data) {
+                    var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
+                    if (modusValue) {
+                        // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
+                        
+                        console.log('Schalter eingeschaltet');
+                    } else {
+                        // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
+                        chrome.tabs.update(tabId, {
+                            url: "checkpage.html"
+                        });
+                       
+                        console.log('Schalter ausgeschaltet');
+                    }
+                });
+           
             console.log("Die URL ist nicht blockierte liste besetzt.");
             return false;
         }

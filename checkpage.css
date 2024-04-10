@@ -1,0 +1,6 @@
+.containerIn {
+    display: flex;
+    justify-content: center; /* horizontale Zentrierung */
+    align-items: center;     /* vertikale Zentrierung */
+    height: 70vh;           /* volle Höhe für die vertikale Zentrierung */
+  }

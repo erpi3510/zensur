@@ -214,7 +214,14 @@ closeButton.addEventListener('click', function () {
 
 // Funktion zum Schließen der Seite
 function closePage() {
-    window.close(); // Schließt das Fenster
+    //window.close(); // Schließt das Fenster
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        // ID der aktiven Registerkarte abrufen
+        var tabId = tabs[0].id;
+    
+        // Schließe die aktive Registerkarte
+        chrome.tabs.remove(tabId);
+      });
 }
 
 function report(url) {

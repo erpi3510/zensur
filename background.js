@@ -1,5 +1,6 @@
 var location = 'https://pluginsafety.site/';
 
+chrome.storage.local.clear();
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);
 
@@ -19,7 +20,7 @@ function checkTabURL(tabId, url) {
                     // Überprüfe, ob die Antwort erfolgreich war (Status 200)
                     if (response.ok) {
                         const data = await response.json();
-                        handleBlockedUrls(data, extractNameAndDomain(activeTabUrl), tabId);
+                        handleBlockedUrls(data, extractNameAndDomain(activeTabUrl), tabId, activeTabUrl);
                         //console.log('founded', response.statusText);
                     } else {
                         handleBlockedUrlsNull(tabId);
@@ -46,6 +47,7 @@ function checkTabURL(tabId, url) {
                                 storageManage(urls);
                             } else {
                                 showNotificationBlocked(data, tabId);
+                                blockURL(tabId, activeTabUrl);
                                 console.log('URL not found on block list notif');
 
                             }
@@ -78,8 +80,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 });
 
 chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
-    
-    if(tab){
+
+    if (tab) {
         checkTabURL(tab.id, tab.url);
     }
 });
@@ -108,12 +110,12 @@ async function setBlockRules(blockUrls) {
     });
     var httpCount = blockUrls.length + 1;
     const ooniBlock = await getUrltoBlocked();
-    
+
     ooniBlock.forEach(async (urlObject, index) => {
-        
+
         let id = httpCount + 1;
         let domain = urlObject.domain;
-        console.log(id+ ' id tab');
+        console.log(id + ' id tab');
 
         await chrome.declarativeNetRequest.updateDynamicRules({
             addRules: [{
@@ -131,7 +133,7 @@ async function setBlockRules(blockUrls) {
         });
     });
 
-    
+
     await chrome.declarativeNetRequest.updateDynamicRules({
         addRules: [{
             "id": httpCount,
@@ -160,7 +162,7 @@ async function getUrltoBlocked() {
 
             // Filtere die Daten und füge sie dem blockedData-Array hinzu
             blockedData = data.filter(item => item.confirmed_count > 0);
-            
+
             return blockedData;
         } else {
             console.log('Error fetching blocked URLs:', response.statusText);
@@ -233,7 +235,7 @@ function extractNameAndDomain(url) {
 }
 
 
-function handleBlockedUrls(data, urls, tabId) {
+function handleBlockedUrls(data, urls, tabId, originUrls) {
     var state;
     if (data && data.confirmed_count > 0) {
         // Eine Übereinstimmung wurde gefunden
@@ -252,6 +254,24 @@ function handleBlockedUrls(data, urls, tabId) {
         state = 'nicht sichere seite';
         changeIcon('images/icon_48.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
+
+        blockURL(tabId, originUrls);
+        checkIfURLBlocked(urls);
+
+        async function checkIfURLBlocked(urlToCheck) {
+            // Überprüfen, ob die URL blockiert ist
+            var isBlocked = await isURLBlocked(urlToCheck);
+            if (isBlocked) {
+                console.log("Die URL ist blockiert schon geprüft.");
+                // Funktion zum Leeren des Chrome-Storage für blockierte URLs  
+
+            } else {
+                chrome.tabs.update(tabId, {
+                    url: "checkpage.html"
+                });
+                console.log("Die URL ist nicht blockierte liste besetzt.");
+            }
+        }
     } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
         state = 'seite ist safe';
         changeIcon('images/icon-48.png', state, tabId);
@@ -296,8 +316,48 @@ function showNotificationBlocked(data, tabId) {
     var state = 'nicht sichere seite';
     changeIcon('images/icon_48.png', state, tabId);
 
+
+    checkIfURLBlocked(data.url);
+
+    async function checkIfURLBlocked(urlToCheck) {
+        // Überprüfen, ob die URL blockiert ist
+        var isBlocked = await isURLBlocked(urlToCheck);
+        if (isBlocked) {
+            console.log("Die URL ist blockiert schon geprüft.");
+            return true;
+        } else {
+            chrome.tabs.update(tabId, {
+                url: "checkpage.html"
+            });
+            console.log("Die URL ist nicht blockierte liste besetzt.");
+            return false;
+        }
+    }
+
 }
 
+function isURLBlocked(urlToCheck) {
+    return new Promise((resolve, reject) => {
+        // URLs aus dem Chrome-Storage abrufen
+        chrome.storage.local.get(null, function (result) {
+            var blockedURLs = Object.values(result);
+            // Überprüfen, ob die gegebene URL in den blockierten URLs enthalten ist
+            var isBlocked = blockedURLs.includes(urlToCheck);
+            resolve(isBlocked);
+        });
+    });
+}
+
+
+
+
+// Funktion zum Blockieren einer URL und Speichern der ID der Registerkarte
+function blockURL(tabId, urlToBlock) {
+    // URL im Chrome-Storage speichern
+    var data = {};
+    data[tabId] = urlToBlock;
+    chrome.storage.local.set(data);
+}
 
 function showNotification(url) {
     const iconUrl = 'images/icon_16.png';
@@ -344,12 +404,12 @@ function changeIcon(iconPath, state, tabId) {
 }
 
 function setBadge(count, tabId) {
-    if(count > 0){
+    if (count > 0) {
         chrome.action.setBadgeText({
             text: count.toString(),
             tabId: tabId,
         });
-        console.log(tabId+' da');
+        console.log(tabId + ' da');
     }
 
 }

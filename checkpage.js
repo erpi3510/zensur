@@ -48,11 +48,8 @@ function getBlockedURL(tabId) {
     // URL aus dem Chrome-Storage abrufen
     chrome.storage.local.get([tabId.toString()], function (result) {
       var blockedURL = result[tabId];
-      // Blockierte URL aus dem Chrome-Storage entfernen
-      chrome.storage.local.remove(tabId.toString(), function () {
-        // Blockierte URL als Wert der Promise resolven
-        resolve(blockedURL);
-      });
+      
+      resolve(blockedURL);
     });
   });
 }

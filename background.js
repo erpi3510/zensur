@@ -46,7 +46,7 @@ function checkTabURL(tabId, url) {
                                 console.log('URL:', extractNameAndDomain(activeTabUrl), 'Date:', result[extractNameAndDomain(activeTabUrl)]);
                                 storageManage(urls);
                             } else {
-                                blockURL(tabId, activeTabUrl);
+                                
                                 showNotificationBlocked(data, tabId, activeTabUrl);
                                 
                                 console.log('URL not found on block list notif');
@@ -71,21 +71,23 @@ function checkTabURL(tabId, url) {
 }
 
 
-chrome.tabs.onCreated.addListener(async function (tab) {
-    checkTabURL(tab.id, tab.url);
-});
+// chrome.tabs.onCreated.addListener(async function (tab) {
+//     checkTabURL(tab.id, tab.url);
+// });
 
-// // Benachrichtigung bei Tab-Aktualisierung
+// Benachrichtigung bei Tab-Aktualisierung
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    checkTabURL(tab.id, tab.url);
-});
-
-chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
-
     if (tab) {
         checkTabURL(tab.id, tab.url);
     }
 });
+
+// chrome.tabs.onActivated.addListener(function (tabId, changeInfo, tab) {
+
+//     if (tab) {
+//         checkTabURL(tab.id, tab.url);
+//     }
+// });
 
 
 // Funktion zum Setzen der Blockierungsregeln
@@ -308,9 +310,11 @@ function handleBlockedUrlsNull(tabId) {
     changeIcon('images/denken-128.png', state, tabId);
 }
 
-function showNotificationBlocked(data, tabId) {
+function showNotificationBlocked(data, tabId, activeTabUrl) {
     const iconUrl = 'images/icon_16.png';
     countNotif();
+    blockURL(tabId, activeTabUrl);
+    //setBadge(data.anomaly_count, tabId);
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
@@ -336,8 +340,7 @@ function showNotificationBlocked(data, tabId) {
         // Überprüfen, ob die URL blockiert ist
         var isBlocked = await isURLBlocked(urlToCheck);
         if (isBlocked) {
-            console.log("Die URL ist blockiert schon geprüft.");
-            return true;
+            console.log("Die URL ist blockiert schon geprüft.");  
         } else {            
                 // Beim Laden der Seite Modus aus dem Storage abrufen
                 chrome.storage.local.get("modus", function (data) {
@@ -357,7 +360,6 @@ function showNotificationBlocked(data, tabId) {
                 });
            
             console.log("Die URL ist nicht blockierte liste besetzt.");
-            return false;
         }
     }
 
@@ -554,3 +556,17 @@ function getDateRange() {
     console.log(`since=${since}&until=${until}` + ' Time ' + time);
     return `since=${since}&until=${until}`;
 }
+
+// chrome.windows.onRemoved.addListener(function(windowId) {
+//     // Onclose browser
+
+// });
+
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+    console.log('Tab mit der ID ' + tabId + ' wurde geschlossen');
+    
+    chrome.storage.local.remove(tabId.toString(), function() {
+        console.log('Daten für Tab ' + tabId + ' wurden gelöscht');
+    });
+});
+

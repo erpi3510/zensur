@@ -33,6 +33,7 @@ chrome.tabs.query({
   var uri = extractNameAndDomain(urls);
   
   document.getElementById("topurls").innerHTML = uri;
+  document.getElementById("titletext").innerHTML = 'check '+uri;
 
   next.addEventListener('click', function () {
     blockURLs([uri]);

@@ -438,7 +438,7 @@ function setBadge(count, tabId) {
             text: count.toString(),
             tabId: tabId,
         });
-        console.log(tabId + ' da');
+        //console.log(tabId + ' da');
     }
 
 }
@@ -557,10 +557,11 @@ function getDateRange() {
     return `since=${since}&until=${until}`;
 }
 
-// chrome.windows.onRemoved.addListener(function(windowId) {
-//     // Onclose browser
+chrome.windows.onRemoved.addListener(function(windowId) {
+    // Onclose browser
+    unblockURLs();
 
-// });
+});
 
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     console.log('Tab mit der ID ' + tabId + ' wurde geschlossen');
@@ -569,4 +570,16 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
         console.log('Daten für Tab ' + tabId + ' wurden gelöscht');
     });
 });
+
+function unblockURLs() {
+    // Alle Einträge im Chrome-Speicher entfernen, die mit 'blockedURL' beginnen
+    chrome.storage.local.get(null, function(items) {
+      var keysToRemove = Object.keys(items).filter(function(key) {
+        return key.startsWith('blockedURL');
+      });
+      chrome.storage.local.remove(keysToRemove, function() {
+        console.log('URLs wurden aus dem Speicher entfernt');
+      });
+    });
+  }
 

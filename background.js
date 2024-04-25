@@ -254,7 +254,7 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
             }
         });
 
-        state = 'nicht sichere seite';
+        state = 'Die Website ist nicht sicher';
         changeIcon('images/icon_48.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
 
@@ -289,7 +289,7 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
             }
         }
     } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-        state = 'seite ist safe';
+        state = 'Die Website ist sicher';
         changeIcon('images/icon-48.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
     } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
@@ -303,7 +303,8 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
         setBadge(data.anomaly_count, tabId);
     }
 }
-
+var titleText = 'Warnung für diese Seite: ';
+var messageText = 'Achtung, diese Seite ist möglicherweise von Zensur bedroht oder selbst Teil der Zensur. Klicken Sie hier für weitere Informationen.';
 function handleBlockedUrlsNull(tabId) {
     var state;
     state = 'Unbekannt';
@@ -318,8 +319,8 @@ function showNotificationBlocked(data, tabId, activeTabUrl) {
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht ' + data.url,
-        message: 'Es gab eine Warnmeldung',
+        title: titleText + data.url,
+        message: messageText,
         silent: false,
     }, function (notificationId) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {
@@ -331,7 +332,7 @@ function showNotificationBlocked(data, tabId, activeTabUrl) {
             }
         });
     });
-    var state = 'nicht sichere seite';
+    var state = 'Die Website ist nicht sicher';
     changeIcon('images/icon_48.png', state, tabId);
 
     checkIfURLBlocked(data.url);
@@ -394,8 +395,8 @@ function showNotification(url) {
     chrome.notifications.create({
         type: 'basic',
         iconUrl: iconUrl,
-        title: 'Achtung, diese Seite ist möglicherweise unter Zensur bedroht oder verhält sich nicht richtig',
-        message: 'Es gab eine Warnmeldung',
+        title: titleText+ url,
+        message: messageText,
         silent: false,
     }, function (notificationId) {
         chrome.notifications.onClicked.addListener(function (clickedNotificationId) {

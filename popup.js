@@ -127,7 +127,7 @@ async function handleUrls(data, url) {
     if (check) {
         const state = 'nicht sicher';
         status = statusDiv.innerHTML = '&nbsp;' + state + '';
-        document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
+        document.getElementById("handling_text").innerHTML = 'Es wird nicht empfohlen, diese Website zu besuchen. Die Website könnte zensierte Inhalte anbieten oder Teil der Zensur sein.';
         statusDiv.style.backgroundColor = "#FF7E07";
         document.getElementById('ignored').disabled = false;
 
@@ -140,7 +140,7 @@ async function handleUrls(data, url) {
         if (data && data.confirmed_count > 0) {
             const state = 'nicht sicher';
             status = statusDiv.innerHTML = '&nbsp;' + state + '';
-            document.getElementById("handling_text").innerHTML = 'Verlassen Sie Bitte diese Seite. Die  Seite könnte zensierte Inhalte anbieten';
+            document.getElementById("handling_text").innerHTML = 'Es wird nicht empfohlen, diese Website zu besuchen. Die Website könnte zensierte Inhalte anbieten oder Teil der Zensur sein.';
             statusDiv.style.backgroundColor = "#FF7E07";
             document.getElementById('ignored').disabled = false;
 
@@ -153,7 +153,7 @@ async function handleUrls(data, url) {
             status = statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#4CAF50";
             statusDiv.style.borderColor = "white";
-            document.getElementById("handling_text").innerHTML = 'Die Seite ist Safe';
+            document.getElementById("handling_text").innerHTML = 'Die Website ist sicher';
 
 
             $(document).ready(function () {
@@ -163,7 +163,7 @@ async function handleUrls(data, url) {
             const state = 'warnung';
             statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#FFA500";
-            document.getElementById("handling_text").innerHTML = 'Passen Sie hier auf';
+            document.getElementById("handling_text").innerHTML = 'Navigation auf dieser Website mit Vorsicht';
 
 
             $(document).ready(function () {
@@ -173,7 +173,7 @@ async function handleUrls(data, url) {
             const state = 'unbekannt';
             statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#757575";
-            document.getElementById("handling_text").innerHTML = 'Es liegen usn derzeit keine dtaen über diese Seite';
+            document.getElementById("handling_text").innerHTML = 'Für diese Website liegen noch keine Daten vor.';
             statusDiv.style.borderColor = "white";
             iconDiv.style.color = "#FFA500";
 

@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Zensur check",
-    "description": "Zensur programm check",
-    "version": "1.0",
+    "name": "Censorship warning plugin",
+    "description": "Lassen Sie sich vor Zensur warnen und surfen Sie ohne Sorgen im Internet. Dies ist ein Experiment und wird nach und nach verbessert.",
+    "version": "0.0.0.1",
     "permissions": [
       "tabs",
       "activeTab",

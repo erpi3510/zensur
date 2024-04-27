@@ -314,6 +314,10 @@ function getTabId() {
 }
 
 $(document).ready(function () {
+    $('#flexSwitchCheckDefault').attr('title', 'Ermöglicht das Blockieren von zensierten Seiten und HTTP-Anfragen.');
+});
+
+$(document).ready(function () {
     // Beim Laden der Seite Modus aus dem Storage abrufen
     chrome.storage.local.get("modus", function (data) {
         var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird

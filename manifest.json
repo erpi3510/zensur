@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Censorship warning plugin",
     "description": "Lassen Sie sich vor Zensur warnen und surfen Sie ohne Sorgen im Internet. Dies ist ein Experiment und wird nach und nach verbessert.",
-    "version": "0.0.0.1",
+    "version": "0.0.0.2",
     "permissions": [
       "tabs",
       "activeTab",

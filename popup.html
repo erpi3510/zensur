@@ -7,8 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="./popup.css" />
-  <script src="./jquery.js"></script>
+  <link rel="stylesheet" href="/css/popup.css" />
+  <script src="/utilities/jquery.js"></script>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
                 <div>
                   <div class="card border-primary mb-3 card_nr1">
                     <div class="card-body text-primary">
-                      <h5 class="card-title text_color_typ">Anomalie Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                      <h5 class="card-title text_color_typ"><p id="message_ano_counted"></p></h5>
                       <div class="card-text anomalie_align">
                         <div class="bar_blue">&nbsp;</div>
                         <div class="text_red1" id="ano_counted"></div>
@@ -70,7 +70,7 @@
                 <div>
                   <div class="card border-primary mb-3 card_nr1">
                     <div class="card-body text-primary">
-                      <h5 class="card-title text_color_typ">Confirmed Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                      <h5 class="card-title text_color_typ"><p id="message_con_count"></p></h5>
                       <div class="card-text anomalie_align">
                         <div class="bar_blue">&nbsp;</div>
                         <div class="text_red2" id="con_count"></div>
@@ -84,7 +84,7 @@
                 <div>
                   <div class="card border-primary mb-3 card_nr1">
                     <div class="card-body text-primary">
-                      <h5 class="card-title text_color_typ">Failure Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                      <h5 class="card-title text_color_typ"><p id="message_fai_count"></p></h5>
                       <div class="card-text anomalie_align">
                         <div class="bar_blue">&nbsp;</div>
                         <div class="text_orange" id="fai_count"></div>
@@ -97,7 +97,7 @@
                 <div>
                   <div class="card border-primary mb-3 card_nr1">
                     <div class="card-body text-primary">
-                      <h5 class="card-title text_color_typ">Measurement Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                      <h5 class="card-title text_color_typ"><p id="message_meas_count"></p></h5>
                       <div class="card-text anomalie_align">
                         <div class="bar_blue">&nbsp;</div>
                         <div class="text_green" id="meas_count"></div>
@@ -124,9 +124,9 @@
                           <div class="text" id="handling_text"></div>
                         </div>
                       <div class="card-text button_align_handling">
-                        <button type="button" class="btn btn-outline-secondary button_handling_setting" id="closeButton" data-toggle="tooltip" data-placement="top" title="Hier können sie die Seite schließen">...</button>
-                        <button type="button" class="btn btn-outline-warning button_handling_setting" id="ignored" disabled="true" data-toggle="tooltip" data-placement="top" title="Hier können sie die Warnung für 24 Stunden freischaltet">Warnungen ignorieren</button>
-                        <button type="button" class="btn btn-outline-danger button_handling_setting" id="reported" data-toggle="tooltip" data-placement="top" title="Hier können sie die Seite an uns melden">Seite Melden</button>
+                        <button type="button" class="btn btn-outline-secondary button_handling_setting" id="closeButton" data-toggle="tooltip" data-placement="top">...</button>
+                        <button type="button" class="btn btn-outline-warning button_handling_setting" id="ignored" disabled="true" data-toggle="tooltip" data-placement="top">...</button>
+                        <button type="button" class="btn btn-outline-danger button_handling_setting" id="reported" data-toggle="tooltip" data-placement="top">...</button>
                       </div>
 
                         <p><button type="button" class="btn btn-link" id="openExtraPageButton">...</button></p>

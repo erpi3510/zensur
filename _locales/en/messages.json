@@ -6,7 +6,7 @@
         "message": "Statistics from"
     },
     "handling_options": {
-        "message": "Handling options"
+        "message": "Opportunities for action"
     },
     "openExtraPageButton": {
         "message": "Click here for more"
@@ -18,7 +18,7 @@
         "message": "Ignore warnings"
     },
     "reported": {
-        "message": "Report page"
+        "message": "Report Page"
     },
     "handling_text1": {
         "message": "It is not recommended to visit this website. The website may offer censored content or be part of censorship."
@@ -65,14 +65,14 @@
     "messageTextFlex": {
         "message": "Allows you to block censored pages and HTTP requests."
     },
-    "messageModeA": {
+    "messageModusA": {
         "message": "Active support"
     },
-    "messageModeH": {
+    "messageModusH": {
         "message": "Severe blockage"
     },
     "message_trend": {
-        "message": "Trend"
+        "message": "trend"
     },
     "message_card_trend": {
         "message": "Here you get a dashboard that shows you how the trends of the last 7, 30 and 365 days have developed based on the pages you have visited."
@@ -83,13 +83,19 @@
     "option1": {
         "message": "Choose option here"
     },
-    "last7Days": {
+    "option2": {
+        "message": "Choose option here"
+    },
+    "option3": {
+        "message": "Choose option here"
+    },
+    "nav_7": {
         "message": "Last 7 days"
     },
-    "last30Days": {
+    "nav_30": {
         "message": "Last month"
     },
-    "last365Days": {
+    "nav_365": {
         "message": "This year"
     },
     "message_site_handling": {
@@ -100,5 +106,32 @@
     },
     "next": {
         "message": "Continue"
+    },
+    "message_title_close": {
+        "message": "You can close the page here"
+    },
+    "message_title_next": {
+        "message": "You can access the page here."
+    },
+    "message_ano_counted": {
+        "message": "Anomalie Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    },
+    "message_con_count": {
+        "message": "Confirmed Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    },
+    "message_fai_count": {
+        "message": "Failure Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    },
+    "message_meas_count": {
+        "message": "Measurement Count &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+    },
+    "message_title_closeButton": {
+        "message": "You can close the page here"
+    },
+    "message_title_ignored": {
+        "message": "Here you can activate the warning for 24 hours"
+    },
+    "message_title_reported": {
+        "message": "You can report the page to us here"
     }
 }

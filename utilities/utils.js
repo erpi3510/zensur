@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('notificationCount').textContent = result.notificationCount || 0;
     });
 });
-
 // traduction
 
 const elementKeys = [

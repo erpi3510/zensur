@@ -89,6 +89,13 @@ function extractNameAndDomain(url) {
   return name + '.' + domain;
 }
 
+$(document).ready(function () {
+  $('#closeButton').attr('title', chrome.i18n.getMessage("message_titel_close"));
+});
+$(document).ready(function () {
+  $('#next').attr('title', chrome.i18n.getMessage("message_titel_next"));
+});
+
 const elementKeys = [
   "message_trying",
   "next",

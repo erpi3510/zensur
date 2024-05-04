@@ -279,7 +279,7 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
                     } else {
                         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
                         chrome.tabs.update(tabId, {
-                            url: "checkpage.html"
+                            url: "/pages/checkpage.html"
                         });
                        
                         console.log('Schalter ausgeschaltet');
@@ -353,7 +353,7 @@ function showNotificationBlocked(data, tabId, activeTabUrl) {
                     } else {
                         // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
                         chrome.tabs.update(tabId, {
-                            url: "checkpage.html"
+                            url: "/pages/checkpage.html"
                         });
                        
                         console.log('Schalter ausgeschaltet');

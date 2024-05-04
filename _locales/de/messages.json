@@ -106,6 +106,33 @@
     },
     "next": {
         "message": "Weiter"
+    },
+    "message_titel_close": {
+        "message": "Hier können sie die Seite schließen"
+    },    
+    "message_titel_next": {
+        "message": "Hier können Sie die Seite aufrufen."
+    },
+    "message_ano_counted": {
+        "message": "Anzahl der Anomalien"
+    },
+    "message_con_count": {
+        "message": "Bestätigte Anzahl"
+    },
+    "message_fai_count": {
+        "message": "Anzahl der Ausfälle"
+    },
+    "message_meas_count": {
+        "message": "Messung Anzahl &nbsp;&nbsp;&nbsp;&nbsp;"
+    },
+    "message_title_closeButton": {
+        "message": "Hier können sie die Seite schließen"
+    },
+    "message_title_ignored": {
+        "message": "Hier können sie die Warnung für 24 Stunden freischaltet"
+    },
+    "message_title_reported": {
+        "message": "Hier können sie die Seite an uns melden"
     }
 
 }

@@ -17,7 +17,7 @@
     "background": {
       "service_worker": "background.js"
     },
-    "default_locale": "de",
+    "default_locale": "en",
     "homepage_url": "https://pluginsafety.site/",
     "action": {
       "default_popup": "popup.html",
@@ -28,7 +28,7 @@
         "128": "images/icon-128.png"
       }
     },
-    "options_page": "extra.html",
+    "options_page": "/pages/extra.html",
     "icons": {
         "16": "images/icon-16.png",
         "32": "images/icon-32.png",
@@ -38,7 +38,7 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["jquery.js","content.js"]
+        "js": ["/utilities/jquery.js"]
       }
     ]
   }

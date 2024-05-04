@@ -14,6 +14,7 @@
 <body>
   <script src="./popup.js" type="module"></script>
   <script src="./extra.js" type="module"></script>
+  <script src="./traduction.js" type="module"></script>
   <p id="testi"></p>
   <div class="card card_nr2">
 
@@ -36,7 +37,7 @@
           <div class="col">
             <div class="mode">
               <div class="form-check form-switch">
-                <label class="form-check-label">Modus:</label>
+                <label class="form-check-label" id="mode_message"></label>
                 <input title="flex" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                 <label class="form-check-label" for="flexSwitchCheckDefault" id="modus"><p id="flexSwitchValue"></p></label>
               </div>
@@ -46,7 +47,7 @@
         <div class="row">
           <div class="col">
             <div class="statistic_text">
-              <span class="statistic_span">Statistik vom</span>
+              <span class="statistic_span" id="statistic_message">Statistik vom</span>
               <div>
                 <p id="start_day_meas"></p>
               </div>
@@ -109,7 +110,7 @@
             <div class="row">
               <div class="col">
                 <div class="handling_text">
-                  <span class="statistic_span">Handlungsmöglichkeiten</span>
+                  <span class="statistic_span" id="handling_options"></span>
                 </div>
                 <div class="row">
                   <div class="col">
@@ -123,12 +124,12 @@
                           <div class="text" id="handling_text"></div>
                         </div>
                       <div class="card-text button_align_handling">
-                        <button type="button" class="btn btn-outline-secondary button_handling_setting" id="closeButton" data-toggle="tooltip" data-placement="top" title="Hier können sie die Seite schließen">Seite schließen</button>
+                        <button type="button" class="btn btn-outline-secondary button_handling_setting" id="closeButton" data-toggle="tooltip" data-placement="top" title="Hier können sie die Seite schließen">...</button>
                         <button type="button" class="btn btn-outline-warning button_handling_setting" id="ignored" disabled="true" data-toggle="tooltip" data-placement="top" title="Hier können sie die Warnung für 24 Stunden freischaltet">Warnungen ignorieren</button>
                         <button type="button" class="btn btn-outline-danger button_handling_setting" id="reported" data-toggle="tooltip" data-placement="top" title="Hier können sie die Seite an uns melden">Seite Melden</button>
                       </div>
 
-                        <p><button type="button" class="btn btn-link" id="openExtraPageButton">Klicken Sie hier für mehr</button></p>
+                        <p><button type="button" class="btn btn-link" id="openExtraPageButton">...</button></p>
                       </div>
                     </div>
                   </div>

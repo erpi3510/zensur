@@ -1,0 +1,111 @@
+{
+    "mode_message": {
+        "message": "Modus:"
+    },
+    "statistic_message": {
+        "message": "Statistik vom"
+    },
+    "handling_options": {
+        "message": "Handlungsmöglichkeiten"
+    },
+    "openExtraPageButton": {
+        "message": "Klicken Sie hier für mehr"
+    },
+    "closeButton": {
+        "message": "Seite schließen"
+    },
+    "ignored": {
+        "message": "Warnungen ignorieren"
+    },
+    "reported": {
+        "message": "Seite Melden"
+    },
+    "handling_text1": {
+        "message": "Es wird nicht empfohlen, diese Website zu besuchen. Die Website könnte zensierte Inhalte anbieten oder Teil der Zensur sein."
+    },
+    "handling_text2": {
+        "message": "Die Website ist sicher"
+    },
+    "handling_text3": {
+        "message": "Navigation auf dieser Website mit Vorsicht"
+    },
+    "handling_text4": {
+        "message": "Für diese Website liegen noch keine Daten vor."
+    },
+    "state1": {
+        "message": "nicht sicher"
+    },
+    "state2": {
+        "message": "sicher"
+    },
+    "state3": {
+        "message": "warnung"
+    },
+    "state4": {
+        "message": "unbekannt"
+    },
+    "state_background1": {
+        "message": "Die Website ist nicht sicher"
+    },
+    "state_background2": {
+        "message": "Die Website ist sicher"
+    },
+    "state_background3": {
+        "message": "Hier aufpassen"
+    },
+    "state_background4": {
+        "message": "Unbekannt"
+    },
+    "titleText": {
+        "message": "Warnung für diese Seite: "
+    },
+    "messageText": {
+        "message": "Achtung, diese Seite ist möglicherweise von Zensur bedroht oder selbst Teil der Zensur. Klicken Sie hier für weitere Informationen."
+    },
+    "messageTextFlex": {
+        "message": "Ermöglicht das Blockieren von zensierten Seiten und HTTP-Anfragen."
+    },
+    "messageModusA": {
+        "message": "Aktive Unterstützung"
+    },
+    "messageModusH": {
+        "message": "Schwere Blockade"
+    },
+    "message_trend": {
+        "message": "Trend"
+    },
+    "message_card_trend": {
+        "message": "Hier bekommst du ein Dashboard, das dir zeigt, wie sich die Trends der letzten 7, 30 und 365 Tage auf Basis deiner besuchten Seiten entwickelt haben."
+    },    
+    "total": {
+        "message": "Gesamte warnung:"
+    },
+    "option1": {
+        "message": "Option hier wählen"
+    },
+    "option2": {
+        "message": "Option hier wählen"
+    },    
+    "option3": {
+        "message": "Option hier wählen"
+    },
+    "nav_7": {
+        "message": "Letzte 7 Tage"
+    },
+    "nav_30": {
+        "message": "Letzter Monat"
+    },
+    "nav_365": {
+        "message": "Dieses Jahr"
+    },    
+    "message_site_handling": {
+        "message": "Handlungsmöglichkeiten für die Seite"
+    },
+    "message_trying": {
+        "message": "Sie versuchen gerade eine zensierte Seite zu öffnen, Wollen sie trotzdem weiter?"
+    },
+    "next": {
+        "message": "Weiter"
+    }
+
+}

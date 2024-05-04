@@ -254,7 +254,7 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
             }
         });
 
-        state = 'Die Website ist nicht sicher';
+        state = chrome.i18n.getMessage("state_background1");
         changeIcon('images/icon_48.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
 
@@ -289,25 +289,25 @@ function handleBlockedUrls(data, urls, tabId, originUrls) {
             }
         }
     } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-        state = 'Die Website ist sicher';
+        state = chrome.i18n.getMessage("state_background2");
         changeIcon('images/icon-48.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
     } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-        state = 'passen sie hier auf';
+        state = chrome.i18n.getMessage("state_background3");
         changeIcon('images/warning-sign_128.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
     } else {
         // Keine Übereinstimmung gefunden
-        state = 'Unbekannt';
+        state = chrome.i18n.getMessage("state_background4");
         changeIcon('images/denken-128.png', state, tabId);
         setBadge(data.anomaly_count, tabId);
     }
 }
-var titleText = 'Warnung für diese Seite: ';
-var messageText = 'Achtung, diese Seite ist möglicherweise von Zensur bedroht oder selbst Teil der Zensur. Klicken Sie hier für weitere Informationen.';
+var titleText = chrome.i18n.getMessage("titleText");
+var messageText = chrome.i18n.getMessage("messageText");
 function handleBlockedUrlsNull(tabId) {
     var state;
-    state = 'Unbekannt';
+    state = chrome.i18n.getMessage("state_background4");
     changeIcon('images/denken-128.png', state, tabId);
 }
 
@@ -332,7 +332,7 @@ function showNotificationBlocked(data, tabId, activeTabUrl) {
             }
         });
     });
-    var state = 'Die Website ist nicht sicher';
+    var state = chrome.i18n.getMessage("state_background1");
     changeIcon('images/icon_48.png', state, tabId);
 
     checkIfURLBlocked(data.url);

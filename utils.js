@@ -7,3 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('notificationCount').textContent = result.notificationCount || 0;
     });
 });
+
+// traduction
+
+const elementKeys = [
+    "message_trend",
+    "message_card_trend",
+    "total",
+    "option1",
+    "option2",
+    "option3",
+    "nav_7",
+    "nav_30",
+    "nav_365"
+];
+
+elementKeys.forEach(key => {
+    document.getElementById(key).innerHTML = chrome.i18n.getMessage(key);
+});

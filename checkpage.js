@@ -88,3 +88,14 @@ function extractNameAndDomain(url) {
   console.log(name + '.' + domain);
   return name + '.' + domain;
 }
+
+const elementKeys = [
+  "message_trying",
+  "next",
+  "message_site_handling",
+  "closeButton"
+];
+
+elementKeys.forEach(key => {
+  document.getElementById(key).innerHTML = chrome.i18n.getMessage(key);
+});

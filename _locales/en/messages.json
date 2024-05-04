@@ -1,0 +1,104 @@
+{
+    "mode_message": {
+        "message": "Mode:"
+    },
+    "statistic_message": {
+        "message": "Statistics from"
+    },
+    "handling_options": {
+        "message": "Handling options"
+    },
+    "openExtraPageButton": {
+        "message": "Click here for more"
+    },
+    "closeButton": {
+        "message": "Close page"
+    },
+    "ignored": {
+        "message": "Ignore warnings"
+    },
+    "reported": {
+        "message": "Report page"
+    },
+    "handling_text1": {
+        "message": "It is not recommended to visit this website. The website may offer censored content or be part of censorship."
+    },
+    "handling_text2": {
+        "message": "The website is secure"
+    },
+    "handling_text3": {
+        "message": "Navigate this website with caution"
+    },
+    "handling_text4": {
+        "message": "There is no data available for this website yet."
+    },
+    "state1": {
+        "message": "not sure"
+    },
+    "state2": {
+        "message": "sure"
+    },
+    "state3": {
+        "message": "warning"
+    },
+    "state4": {
+        "message": "unknown"
+    },
+    "state_background1": {
+        "message": "The website is not secure"
+    },
+    "state_background2": {
+        "message": "The website is secure"
+    },
+    "state_background3": {
+        "message": "Be careful here"
+    },
+    "state_background4": {
+        "message": "Unknown"
+    },
+    "titleText": {
+        "message": "Warning for this site: "
+    },
+    "messageText": {
+        "message": "Attention, this page may be under threat of censorship or may itself be part of censorship. Click here for more information."
+    },
+    "messageTextFlex": {
+        "message": "Allows you to block censored pages and HTTP requests."
+    },
+    "messageModeA": {
+        "message": "Active support"
+    },
+    "messageModeH": {
+        "message": "Severe blockage"
+    },
+    "message_trend": {
+        "message": "Trend"
+    },
+    "message_card_trend": {
+        "message": "Here you get a dashboard that shows you how the trends of the last 7, 30 and 365 days have developed based on the pages you have visited."
+    },
+    "total": {
+        "message": "Total warning:"
+    },
+    "option1": {
+        "message": "Choose option here"
+    },
+    "last7Days": {
+        "message": "Last 7 days"
+    },
+    "last30Days": {
+        "message": "Last month"
+    },
+    "last365Days": {
+        "message": "This year"
+    },
+    "message_site_handling": {
+        "message": "Opportunities for action for the page"
+    },
+    "message_trying": {
+        "message": "You are trying to open a censored page, do you still want to continue?"
+    },
+    "next": {
+        "message": "Continue"
+    }
+}

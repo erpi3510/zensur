@@ -2,3 +2,10 @@
     display: flex;
     justify-content: space-between;
 }
+
+.card-text {
+    display: flex;            /* Aktiviert Flexbox für den Container */
+    align-items: center;      /* Zentriert die Elemente vertikal */
+    justify-content: flex-start; /* Beginnt die Ausrichtung von links */
+    gap: 10px;                /* Setzt einen horizontalen Abstand zwischen den Elementen */
+}

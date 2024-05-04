@@ -125,9 +125,9 @@ async function handleUrls(data, url) {
     var iconDiv = document.getElementById("icon_infos");
 
     if (check) {
-        const state = 'nicht sicher';
+        const state = chrome.i18n.getMessage("state1");
         status = statusDiv.innerHTML = '&nbsp;' + state + '';
-        document.getElementById("handling_text").innerHTML = 'Es wird nicht empfohlen, diese Website zu besuchen. Die Website könnte zensierte Inhalte anbieten oder Teil der Zensur sein.';
+        document.getElementById("handling_text").innerHTML = chrome.i18n.getMessage("handling_text1");
         statusDiv.style.backgroundColor = "#FF7E07";
         document.getElementById('ignored').disabled = false;
 
@@ -138,9 +138,9 @@ async function handleUrls(data, url) {
 
     } else {
         if (data && data.confirmed_count > 0) {
-            const state = 'nicht sicher';
+            const state = chrome.i18n.getMessage("state1");
             status = statusDiv.innerHTML = '&nbsp;' + state + '';
-            document.getElementById("handling_text").innerHTML = 'Es wird nicht empfohlen, diese Website zu besuchen. Die Website könnte zensierte Inhalte anbieten oder Teil der Zensur sein.';
+            document.getElementById("handling_text").innerHTML = chrome.i18n.getMessage("handling_text1");
             statusDiv.style.backgroundColor = "#FF7E07";
             document.getElementById('ignored').disabled = false;
 
@@ -149,31 +149,31 @@ async function handleUrls(data, url) {
                 $('#status_url').attr('title', state);
             });
         } else if (data && data.confirmed_count == 0 && data.anomaly_count == 0) {
-            const state = 'sicher';
+            const state = chrome.i18n.getMessage("state2");
             status = statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#4CAF50";
             statusDiv.style.borderColor = "white";
-            document.getElementById("handling_text").innerHTML = 'Die Website ist sicher';
+            document.getElementById("handling_text").innerHTML = chrome.i18n.getMessage("handling_text2");
 
 
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
         } else if (data && data.confirmed_count >= 0 && data.anomaly_count >= 0) {
-            const state = 'warnung';
+            const state = chrome.i18n.getMessage("state3");
             statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#FFA500";
-            document.getElementById("handling_text").innerHTML = 'Navigation auf dieser Website mit Vorsicht';
+            document.getElementById("handling_text").innerHTML = chrome.i18n.getMessage("handling_text3");
 
 
             $(document).ready(function () {
                 $('#status_url').attr('title', state);
             });
         } else {
-            const state = 'unbekannt';
+            const state = chrome.i18n.getMessage("state4");
             statusDiv.innerHTML = '&nbsp;' + state + '';
             statusDiv.style.backgroundColor = "#757575";
-            document.getElementById("handling_text").innerHTML = 'Für diese Website liegen noch keine Daten vor.';
+            document.getElementById("handling_text").innerHTML = chrome.i18n.getMessage("handling_text4");
             statusDiv.style.borderColor = "white";
             iconDiv.style.color = "#FFA500";
 
@@ -314,7 +314,7 @@ function getTabId() {
 }
 
 $(document).ready(function () {
-    $('#flexSwitchCheckDefault').attr('title', 'Ermöglicht das Blockieren von zensierten Seiten und HTTP-Anfragen.');
+    $('#flexSwitchCheckDefault').attr('title', chrome.i18n.getMessage("messageTextFlex"));
 });
 
 $(document).ready(function () {
@@ -323,11 +323,11 @@ $(document).ready(function () {
         var modusValue = data.modus || false; // Standardwert auf false setzen, wenn kein Wert gefunden wird
         if (modusValue) {
             // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-            document.getElementById("flexSwitchValue").innerHTML = "Hard block";
+            document.getElementById("flexSwitchValue").innerHTML = chrome.i18n.getMessage("messageModusH");
             console.log('Schalter eingeschaltet');
         } else {
             // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-            document.getElementById("flexSwitchValue").innerHTML = "Normal";
+            document.getElementById("flexSwitchValue").innerHTML = chrome.i18n.getMessage("messageModusA");
             console.log('Schalter ausgeschaltet');
         }
         $('#flexSwitchCheckDefault').prop('checked', modusValue);
@@ -344,11 +344,11 @@ $(document).ready(function () {
 
         if (checked) {
             // Code, der ausgeführt werden soll, wenn der Schalter eingeschaltet wird
-            document.getElementById("flexSwitchValue").innerHTML = "hard Block";
+            document.getElementById("flexSwitchValue").innerHTML = chrome.i18n.getMessage("messageModusH");
             console.log('Schalter eingeschaltet');
         } else {
             // Code, der ausgeführt werden soll, wenn der Schalter ausgeschaltet wird
-            document.getElementById("flexSwitchValue").innerHTML = "Normal"
+            document.getElementById("flexSwitchValue").innerHTML = chrome.i18n.getMessage("messageModusA");
             console.log('Schalter ausgeschaltet');
         }
         reloadTabAfterDelay();

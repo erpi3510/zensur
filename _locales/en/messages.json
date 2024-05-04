@@ -181,5 +181,14 @@
     },
     "tutorials": {
         "message": "to the tutorials"
+    },
+    "option4": {
+        "message": "No URLs available"
+    },
+    "option5": {
+        "message": "No URLs available"
+    },
+    "option6": {
+        "message": "No URLs available"
     }
 }

@@ -103,7 +103,7 @@ async function updateDropdownMenu() {
 
         // Wenn die URL nicht im Local Storage vorhanden ist, leeres Dropdown-Menü anzeigen
         if (!valueUrl) {
-            selectElement.innerHTML = '<option selected>Keine URLs verfügbar</option>';
+            selectElement.innerHTML = '<option selected>'+chrome.i18n.getMessage("option6")+'</option>';
             return;
         }
 

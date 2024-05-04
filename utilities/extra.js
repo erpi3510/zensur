@@ -4,6 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   openExtraPageButton.addEventListener('click', function () {
       // Öffnen Sie die zusätzliche Seite in einem neuen Tab
-      chrome.tabs.create({ url: 'extra.html' });
+      chrome.tabs.create({ url: './pages/extra.html' });
   });
 });

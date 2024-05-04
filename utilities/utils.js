@@ -18,7 +18,8 @@ const elementKeys = [
     "option3",
     "nav_7",
     "nav_30",
-    "nav_365"
+    "nav_365",
+    "message_statistic"
 ];
 
 elementKeys.forEach(key => {

@@ -136,31 +136,31 @@ async function fetchDataAndCreateChart(url) {
         const chartData = {
             labels: [], // Hier werden die Messdaten eingefügt
             datasets: [{
-                label: 'Anomaly Count',
+                label: chrome.i18n.getMessage("chart_ano_counted"),
                 data: [],
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255,105,97)',
+                backgroundColor: 'rgba(255, 105, 97, 0.2)',
                 fill: true,
             },
             {
-                label: 'Confirmed Count',
+                label: chrome.i18n.getMessage("chart_con_count"),
                 data: [],
-                borderColor: 'rgb(54, 162, 235)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgb(211,47,47)',
+                backgroundColor: 'rgba(211,47,47, 0.2)',
                 fill: true,
             },
             {
-                label: 'Failure Count',
+                label: chrome.i18n.getMessage("chart_fai_count"),
                 data: [],
-                borderColor: 'rgb(255, 205, 86)',
-                backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                borderColor: 'rgb(255,165,0)',
+                backgroundColor: 'rgba(255,165,0, 0.2)',
                 fill: true,
             },
             {
-                label: 'Measurement Count',
+                label: chrome.i18n.getMessage("chart_meas_count"),
                 data: [],
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgb(76,175,80)',
+                backgroundColor: 'rgba(76,175,80, 0.2)',
                 fill: true,
             }]
         };
@@ -180,13 +180,13 @@ async function fetchDataAndCreateChart(url) {
                 x: {
                     title: {
                         display: true,
-                        text: 'Measurement Start Date'
+                        text: chrome.i18n.getMessage("MeasurementStartDate")
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Count'
+                        text: chrome.i18n.getMessage("CountChart")
                     },
                     beginAtZero: true
                 }

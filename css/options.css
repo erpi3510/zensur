@@ -1,0 +1,8 @@
+.containerIn {
+    display: flex;
+    justify-content: space-between; /* horizontale Zentrierung */
+    align-items: center;     /* vertikale Zentrierung */
+    height: 70vh;           /* volle Höhe für die vertikale Zentrierung */
+    padding: 300px;
+    
+  }

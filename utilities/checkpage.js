@@ -32,8 +32,8 @@ chrome.tabs.query({
   var urls = await getBlockedURL(tabId);
   var uri = extractNameAndDomain(urls);
   
-  document.getElementById("topurls").innerHTML = uri;
-  document.getElementById("titletext").innerHTML = 'check '+uri;
+  document.getElementById("topurls").innerHTML = uri + ' '+ '😑';
+  document.getElementById("titletext").innerHTML = chrome.i18n.getMessage('titletext') + uri;
 
   next.addEventListener('click', function () {
     blockURLs([uri]);

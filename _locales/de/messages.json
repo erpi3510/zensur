@@ -76,7 +76,7 @@
     },
     "message_card_trend": {
         "message": "Hier bekommst du ein Dashboard, das dir zeigt, wie sich die Trends der letzten 7, 30 und 365 Tage auf Basis deiner besuchten Seiten entwickelt haben."
-    },    
+    },
     "total": {
         "message": "Gesamte warnung:"
     },
@@ -85,7 +85,7 @@
     },
     "option2": {
         "message": "Option hier wählen"
-    },    
+    },
     "option3": {
         "message": "Option hier wählen"
     },
@@ -97,19 +97,19 @@
     },
     "nav_365": {
         "message": "Dieses Jahr"
-    },    
+    },
     "message_site_handling": {
         "message": "Handlungsmöglichkeiten für die Seite"
     },
     "message_trying": {
-        "message": "Sie versuchen gerade eine zensierte Seite zu öffnen, Wollen sie trotzdem weiter?"
+        "message": "Sie versuchen gerade eine zensierte Seite zu öffnen 🥺, Wollen Sie trotzdem weiter?"
     },
     "next": {
         "message": "Weiter"
     },
     "message_titel_close": {
         "message": "Hier können sie die Seite schließen"
-    },    
+    },
     "message_titel_next": {
         "message": "Hier können Sie die Seite aufrufen."
     },
@@ -133,6 +133,53 @@
     },
     "message_title_reported": {
         "message": "Hier können sie die Seite an uns melden"
+    },
+    "chart_ano_counted": {
+        "message": "Anzahl der Anomalien"
+    },
+    "chart_con_count": {
+        "message": "Bestätigte Anzahl"
+    },
+    "chart_fai_count": {
+        "message": "Anzahl der Ausfälle"
+    },
+    "chart_meas_count": {
+        "message": "Messung Anzahl"
+    },
+    "MeasurementStartDate": {
+        "message": "Beginn der Messung"
+    },
+    "CountChart": {
+        "message": "Zählung"
+    },
+    "appAuthor": {
+        "message": "Eric Nono"
+    },
+    "appDesc": {
+        "message": "Lassen Sie sich vor Zensur warnen und surfen Sie ohne Sorgen im Internet. Dies ist ein Experiment und wird nach und nach verbessert."
+    },
+    "appName": {
+        "message": "Plugin zur Warnung vor Zensur"
+    },
+    "titletext": {
+        "message": "Überprüfung der Website: "
+    },
+    "message_statistic": {
+        "message": "Statistischer Überblick"
+    },
+    "titleinstall": {
+        "message": "Erfolgreich installiert"
+    },
+    "thanks": {
+        "message": "Danke für das Herunterladen 🙂"
+    },
+    "message_page_handling": {
+        "message": "Weitere Schritte sind erforderlich, wenn die Erweiterung nicht in der oberen Leiste erscheint."
+    },
+    "message_info": {
+        "message": "Bitte pinnen Sie die Erweiterung, damit Sie besser von der Erfahrung der Erweiterung profitieren können. Wenn Sie nicht wissen, wie Sie eine Erweiterung anheften können, empfehlen wir Ihnen Google."
+    },
+    "tutorials": {
+        "message": "zu den Tutorials"
     }
-
 }

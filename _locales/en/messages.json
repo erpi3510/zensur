@@ -102,7 +102,7 @@
         "message": "Opportunities for action for the page"
     },
     "message_trying": {
-        "message": "You are trying to open a censored page, do you still want to continue?"
+        "message": "You are trying to open a censored page 🥺, do you still want to continue?"
     },
     "next": {
         "message": "Continue"
@@ -133,5 +133,53 @@
     },
     "message_title_reported": {
         "message": "You can report the page to us here"
+    },
+    "chart_ano_counted": {
+        "message": "Anomaly Count"
+    },
+    "chart_con_count": {
+        "message": "Confirmed Count"
+    },
+    "chart_fai_count": {
+        "message": "Failure Count"
+    },
+    "chart_meas_count": {
+        "message": "Measurement Count"
+    },
+    "MeasurementStartDate": {
+        "message": "Measurement Start Date"
+    },
+    "CountChart": {
+        "message": "Count"
+    },
+    "appAuthor": {
+        "message": "Eric Nono"
+    },
+    "appDesc": {
+        "message": "Be warned about censorship and surf the Internet without worries. This is an experiment and will be improved over time."
+    },
+    "appName": {
+        "message": "Censorship warning plugin"
+    },
+    "titletext": {
+        "message": "Site review: "
+    },
+    "message_statistic": {
+        "message": "Statistical overview"
+    },
+    "titleinstall": {
+        "message": "Installed successfully"
+    },
+    "thanks": {
+        "message": "Thanks for downloading 🙂"
+    },
+    "message_page_handling": {
+        "message": "Further steps are required if the extension does not appear in the top bar."
+    },
+    "message_info": {
+        "message": "Please pin the extension so that you can better benefit from the experience of the extension. If you don't know how to pin an extension, we recommend Google."
+    },
+    "tutorials": {
+        "message": "to the tutorials"
     }
 }

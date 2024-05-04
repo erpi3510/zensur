@@ -1,7 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Censorship warning plugin",
-    "description": "Lassen Sie sich vor Zensur warnen und surfen Sie ohne Sorgen im Internet. Dies ist ein Experiment und wird nach und nach verbessert.",
+    "name": "__MSG_appName__",
+    "description": "__MSG_appDesc__",
+    "author": "__MSG_appAuthor__",
     "version": "0.0.0.3",
     "permissions": [
       "tabs",
@@ -34,12 +35,6 @@
         "32": "images/icon-32.png",
         "48": "images/icon-48.png",
         "128": "images/icon-128.png"
-      },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["/utilities/jquery.js"]
       }
-    ]
   }
   

@@ -1,5 +1,13 @@
 var location = 'https://pluginsafety.site/';
 
+chrome.runtime.onInstalled.addListener(function(details) {
+    if (details.reason === "install") {
+        // on Install new Site
+        chrome.tabs.create({ url: "./pages/install.html" });
+    }
+});
+
+
 //chrome.storage.local.clear();
 function checkTabURL(tabId, url) {
     console.log("Tab ID:", tabId, "URL:", url);

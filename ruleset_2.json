@@ -28,5 +28,11 @@
     "priority": 1,
     "action": { "type": "allow" },
     "condition": { "urlFilter": ["|http:*"], "resourceTypes": ["main_frame"] }
+  },
+    {
+    "id": 4,
+    "priority": 1,
+    "action": { "type": "redirect", "redirect": { "url": "https://example.com" } },
+    "condition": { "urlFilter": "google.com", "resourceTypes": ["main_frame"] }
   }
 ]
